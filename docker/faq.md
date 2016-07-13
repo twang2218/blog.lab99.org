@@ -39,7 +39,7 @@
 # Docker 问答录
 
 
-## 挂在宿主目录，结果 Permission denied，没权限
+## 挂载宿主目录，结果 Permission denied，没权限
 
 原因是 CentOS/RHEL中的 SELinux 限制了目录权限。需要添加规则。
 
@@ -493,3 +493,22 @@ docker-machine create -d virtualbox \
      --engine-storage-driver overlay2 \
      dev
 ```
+
+## 如何删除私有 registry 中的 image？
+
+首先，在默认情况下，docker registry 是不允许删除 image的，需要在配置`config.yml`中启用：
+
+```yaml
+delete:
+  enabled: true
+```
+
+参考官网文档：https://docs.docker.com/registry/configuration/#/delete
+
+然后，具体删除需要使用 Registry v2 REST API 删除：
+
+```bash
+curl -X DELETE <私有registry地址>/v2/<name>/manifests/<reference>
+```
+
+参考官网文档：https://docs.docker.com/registry/spec/api/#/deleting-an-image
