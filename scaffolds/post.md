@@ -1,5 +1,7 @@
 ---
+layout: {{ layout }}
+category: notes
 title: {{ title }}
-date: {{ date }}
 tags:
+date: {{ date }}
 ---
