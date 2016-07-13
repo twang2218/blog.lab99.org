@@ -266,77 +266,77 @@ https://gist.github.com/twang2218/def4097648deac398a949b58e2a31610
 
 # Docker Machine 相关问题
 
- # Docker Registry 相关问题
+# Docker Registry 相关问题
 
- ## 我 `docker push` 了很多镜像到私有的 registry 上，怎么才能查看上面都有啥？或者搜索？
+## 我 `docker push` 了很多镜像到私有的 registry 上，怎么才能查看上面都有啥？或者搜索？
 
- 两种办法，一种是使用 Registry V2 API。可以列出所有镜像：
+两种办法，一种是使用 Registry V2 API。可以列出所有镜像：
 
- ```bash
- curl http://<私有registry地址>/v2/_catalog
- ```
+```bash
+curl http://<私有registry地址>/v2/_catalog
+```
 
- 如果私有 Registry 尚支持 V1 API（已经废弃），可以使用 `docker search`
+如果私有 Registry 尚支持 V1 API（已经废弃），可以使用 `docker search`
 
- ```bash
- docker search <私有registry地址>/<关键字>
- ```
+```bash
+docker search <私有registry地址>/<关键字>
+```
 
 
- ## 如何删除私有 registry 中的镜像？
+## 如何删除私有 registry 中的镜像？
 
- 首先，在默认情况下，docker registry 是不允许删除镜像的，需要在配置`config.yml`中启用：
+首先，在默认情况下，docker registry 是不允许删除镜像的，需要在配置`config.yml`中启用：
 
- ```yaml
- delete:
-   enabled: true
- ```
+```yaml
+delete:
+    enabled: true
+```
 
- 参考官网文档：https://docs.docker.com/registry/configuration/#/delete
+参考官网文档：https://docs.docker.com/registry/configuration/#/delete
 
- 然后，具体删除需要使用 Registry v2 REST API 删除：
+然后，具体删除需要使用 Registry v2 REST API 删除：
 
- ```bash
- curl -X DELETE <私有registry地址>/v2/<name>/manifests/<reference>
- ```
+```bash
+curl -X DELETE <私有registry地址>/v2/<name>/manifests/<reference>
+```
 
- 参考官网文档：https://docs.docker.com/registry/spec/api/#/deleting-an-image
+参考官网文档：https://docs.docker.com/registry/spec/api/#/deleting-an-image
 
- # CentOS/RHEL 红帽系统特有问题
+# CentOS/RHEL 红帽系统特有问题
 
- ## 挂载宿主目录，结果 Permission denied，没权限
+## 挂载宿主目录，结果 Permission denied，没权限
 
- 原因是 CentOS/RHEL中的 SELinux 限制了目录权限。需要添加规则。
+原因是 CentOS/RHEL中的 SELinux 限制了目录权限。需要添加规则。
 
- ```bash
- $ man docker-run
- ...
- When  using  SELinux,  be  aware that the host has no knowledge of container SELinux policy. Therefore, in the above example, if SELinux policy  is enforced,  the /var/db directory is not  writable to the container. A "Permission Denied" message will occur and an avc: message in the host's syslog.
+```bash
+$ man docker-run
+...
+When  using  SELinux,  be  aware that the host has no knowledge of container SELinux policy. Therefore, in the above example, if SELinux policy  is enforced,  the /var/db directory is not  writable to the container. A "Permission Denied" message will occur and an avc: message in the host's syslog.
 
- To  work  around  this, at time of writing this man page, the following command needs to be run in order for the  proper  SELinux  policy  type label to be attached to the host directory:
+To  work  around  this, at time of writing this man page, the following command needs to be run in order for the  proper  SELinux  policy  type label to be attached to the host directory:
 
- # chcon -Rt svirt_sandbox_file_t /var/db
- ```
+# chcon -Rt svirt_sandbox_file_t /var/db
+```
 
- 参考：http://www.projectatomic.io/blog/2015/06/using-volumes-with-docker-can-cause-problems-with-selinux/
+参考：http://www.projectatomic.io/blog/2015/06/using-volumes-with-docker-can-cause-problems-with-selinux/
 
- ## Docker的 `/var/lib/docker/devicemapper` 占用空间不断增长, 怎么破?
+## Docker的 `/var/lib/docker/devicemapper` 占用空间不断增长, 怎么破?
 
- 这类问题一般是 CentOS/RHEL 红帽系的问题，CentOS 这类红帽系统中，由于不像 Ubuntu 那样有成熟的 Union FS实现(如`aufs`)，所以只能使用 `devicemapper`，而默认使用的是`lvm-loop`，也就是用一个稀疏文件来当成一个块设备，给`devicemapper`用，作为Docker镜像容器文件系统。这是非常不推荐使用的，性能很差不说，不稳定，还有很多bug，如果没办法换Ubuntu/Debian系统，那么最起码应该建立块设备（分区、卷）给 `devicemapper`用。
+这类问题一般是 CentOS/RHEL 红帽系的问题，CentOS 这类红帽系统中，由于不像 Ubuntu 那样有成熟的 Union FS实现(如`aufs`)，所以只能使用 `devicemapper`，而默认使用的是`lvm-loop`，也就是用一个稀疏文件来当成一个块设备，给`devicemapper`用，作为Docker镜像容器文件系统。这是非常不推荐使用的，性能很差不说，不稳定，还有很多bug，如果没办法换Ubuntu/Debian系统，那么最起码应该建立块设备（分区、卷）给 `devicemapper`用。
 
- 参考官网文档：https://docs.docker.com/engine/userguide/storagedriver/device-mapper-driver/#for-a-direct-lvm-mode-configuration
+参考官网文档：https://docs.docker.com/engine/userguide/storagedriver/device-mapper-driver/#for-a-direct-lvm-mode-configuration
 
- 严格来说 CentOS/RHEL 7 中实际上有一个 Union FS 实现，虽然 CentOS/RHEL 7 的内核是3.10，不过红帽从 Linux 3.18 backport 回来了 `overlay` fs 的驱动。但是，红帽自己都在官方的发布声明中说能不要用就不用。
+严格来说 CentOS/RHEL 7 中实际上有一个 Union FS 实现，虽然 CentOS/RHEL 7 的内核是3.10，不过红帽从 Linux 3.18 backport 回来了 `overlay` fs 的驱动。但是，红帽自己都在官方的发布声明中说能不要用就不用。
 
- https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/7.2_Release_Notes/technology-preview-file_systems.html
+https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/7.2_Release_Notes/technology-preview-file_systems.html
 
- ## CentOS 7 的内核太老了 3.10，是不是很多Docker功能不支持？
+## CentOS 7 的内核太老了 3.10，是不是很多Docker功能不支持？
 
- 之前我也是这样以为的，毕竟很多内核功能需要更高的版本。比如 Overlay FS 需要Linux 3.18，而Overlay network需要Linux 3.16。而CentOS 7内核为3.10，按理说不会支持这些高级特性。
+之前我也是这样以为的，毕竟很多内核功能需要更高的版本。比如 Overlay FS 需要Linux 3.18，而Overlay network需要Linux 3.16。而CentOS 7内核为3.10，按理说不会支持这些高级特性。
 
- 但是，事实并非如此，红帽团队会把一些新内核的功能backport回老的内核。比如 `overlay fs`等。所以一些功能依旧会支持。因此 CentOS 7的Docker Engine同样可以支持 `overlay network`，以及 `overlay fs`。因此在新的 Docker 1.12 中，CentOS/RHEL 7 才有可能支持 Swarm Mode。
+但是，事实并非如此，红帽团队会把一些新内核的功能backport回老的内核。比如 `overlay fs`等。所以一些功能依旧会支持。因此 CentOS 7的Docker Engine同样可以支持 `overlay network`，以及 `overlay fs`。因此在新的 Docker 1.12 中，CentOS/RHEL 7 才有可能支持 Swarm Mode。
 
- 即使红帽会把一些高版本内核的功能backport回 3.10 内核中，这种修修补补出来的功能，并不一定很稳定，所以依旧建议使用其它维护内核版本升级的Linux发行版，如 Ubuntu。
+即使红帽会把一些高版本内核的功能backport回 3.10 内核中，这种修修补补出来的功能，并不一定很稳定，所以依旧建议使用其它维护内核版本升级的Linux发行版，如 Ubuntu。
 
 
 # 伟大的墙相关问题
@@ -545,7 +545,7 @@ https://blog.docker.com/2016/02/docker-1-10/
 https://blog.docker.com/2016/04/docker-engine-1-11-runc/
 https://blog.docker.com/2016/06/docker-1-12-built-in-orchestration/
 
-## 问一句 Kubernetes 为啥叫 `k8s`？
+## 问一句 Kubernetes 为啥叫 "k8s"？
 
 是因为发音接近么……好吧，实话说了吧，是因为犯懒，数数 k 和 s 中间多少个字母？8个吧，这个8 的意思就是省略8个字母，懒得敲了…… 其实这类用法很多，比如 i18n (internationalization), l11n (localization) 等等，老外也懒得打字啊。
 
