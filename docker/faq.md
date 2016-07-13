@@ -42,7 +42,7 @@
 - [其它问题](#%E5%85%B6%E5%AE%83%E9%97%AE%E9%A2%98)
   - [Docker 资料好少啊？网上的命令怎么不能用？](#docker-%E8%B5%84%E6%96%99%E5%A5%BD%E5%B0%91%E5%95%8A%EF%BC%9F%E7%BD%91%E4%B8%8A%E7%9A%84%E5%91%BD%E4%BB%A4%E6%80%8E%E4%B9%88%E4%B8%8D%E8%83%BD%E7%94%A8%EF%BC%9F)
   - [Docker 1.8以后版本都有什么改进么？](#docker-18%E4%BB%A5%E5%90%8E%E7%89%88%E6%9C%AC%E9%83%BD%E6%9C%89%E4%BB%80%E4%B9%88%E6%94%B9%E8%BF%9B%E4%B9%88%EF%BC%9F)
-  - [问一句 Kubernetes 为啥叫 `k8s`？](#%E9%97%AE%E4%B8%80%E5%8F%A5-kubernetes-%E4%B8%BA%E5%95%A5%E5%8F%AB-k8s%EF%BC%9F)
+  - [问一句 Kubernetes 为啥叫 "k8s"？](#%E9%97%AE%E4%B8%80%E5%8F%A5-kubernetes-%E4%B8%BA%E5%95%A5%E5%8F%AB-k8s%EF%BC%9F)
   - [我的配置文件传群文件了，帮忙看看？这是我的配置…(省略几千字)](#%E6%88%91%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E4%BC%A0%E7%BE%A4%E6%96%87%E4%BB%B6%E4%BA%86%EF%BC%8C%E5%B8%AE%E5%BF%99%E7%9C%8B%E7%9C%8B%EF%BC%9F%E8%BF%99%E6%98%AF%E6%88%91%E7%9A%84%E9%85%8D%E7%BD%AE%E2%80%A6%E7%9C%81%E7%95%A5%E5%87%A0%E5%8D%83%E5%AD%97)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
