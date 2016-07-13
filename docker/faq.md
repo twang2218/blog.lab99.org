@@ -148,7 +148,7 @@ docker create -it --storage-opt size=120G fedora /bin/bash
 ## `docker stats` 显示的只有容器ID，怎么才能显示容器名字？
 
 ```bash
-docker stats $(docker ps --format={{.Names}})
+docker stats $(docker ps --format='{{.Names}}')
 ```
 
 ## `docker images` 命令显示的镜像是真的占了那么大的空间么？每次都是下载这么大的镜像？感觉好像很多有不少重复的东西。
@@ -301,6 +301,12 @@ curl -X DELETE <私有registry地址>/v2/<name>/manifests/<reference>
 ```
 
 参考官网文档：https://docs.docker.com/registry/spec/api/#/deleting-an-image
+
+## 如何在 Docker Toolbox 中创建的 docker daemon 中添加`DOCKER_OPTS`之类的配置？
+
+其实在最初创建该docker host时，就可以利用 `docker-machine` 指定引擎配置参数，如果不要紧，可以直接rm掉这个虚拟机，重新建立。
+
+如果不方便 rm 掉这个虚拟机，可以 `docker-machine ssh` 进入这个虚拟机，然后修改 `/var/lib/boot2docker/profile` 文件，修改里面的 `EXTRA_ARGS` 参数即可。
 
 # CentOS/RHEL 红帽系统特有问题
 
@@ -509,7 +515,8 @@ docker pull php:7-fpm-alpine  0.05s user 0.04s system 0% cpu 13.778 total
 
 ```bash
 docker-machine create -d virtualbox \
-     --engine-registry-mirror=https://jxus37ac.mirror.aliyuncs.com \
+     --engine-registry-mirror https://jxus37ac.mirror.aliyuncs.com \
+     --engine-insecure-registry 192.168.99.0/24:5000 \
      --engine-storage-driver overlay2 \
      dev
 ```
