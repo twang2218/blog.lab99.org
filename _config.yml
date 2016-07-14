@@ -62,8 +62,12 @@ pagination_dir: page
 
 # Extensions
 ## Plugins: https://hexo.io/plugins/
+# hexo-toc
+toc:
+    maxdepth: 3
+
 ## Themes: https://hexo.io/themes/
-theme: landscape
+theme: jekyll
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
