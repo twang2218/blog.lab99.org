@@ -32,7 +32,7 @@ https://docs.docker.com/engine/admin/systemd/
 
 # Docker 使用问题
 
-## 如何在Docker内使用`docker`命令(比如Jenkins)
+## 如何在Docker内使用`docker`命令(比如Jenkins)？
 
 首先，不要在Docker中安装Docker服务，也就是所谓的Docker In Docker，参考文章：
 https://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci/
@@ -54,7 +54,7 @@ docker info
 
 其中宿主需要去监听指定`IP:PORT`位置，并且把上面的`172.17.0.1:2376`换成实际绑定地址和端口组合。
 
-## 怎么指定容器 IP 地址？每次重启容器都要变化IP地址怎么办？
+## 怎么固定容器 IP 地址？每次重启容器都要变化IP地址怎么办？
 
 一般情况是不需要指定容器IP地址的。这不是虚拟主机，而是容器。其地址是供容器间通讯的，容器间则不用ip直接通讯，而使用主机名、服务名、网络别名。
 
@@ -69,6 +69,9 @@ docker info
 而对于新的环境（Docker 1.10以上），应该给容器建立自定义网络，同一个自定义网络中，可以使用对方容器的容器名、服务名、网络别名来找到对方。这个时候帮助进行服务发现的是Docker 内置的DNS。所以，无论容器是否重启、更换IP，内置的DNS都能正确指定到对方的位置。
 
 参考官网文档：https://docs.docker.com/engine/userguide/networking/work-with-networks/#linking-containers-in-user-defined-networks
+
+建议参考一下我写的 LNMP 的例子：
+https://coding.net/u/twang2218/p/docker-lnmp/git
 
 ## Docker 容器如何随系统一同启动？
 
@@ -109,7 +112,7 @@ docker create -it --storage-opt size=120G fedora /bin/bash
 docker stats $(docker ps --format='{{.Names}}')
 ```
 
-## `docker images` 命令显示的镜像是真的占了那么大的空间么？每次都是下载这么大的镜像？感觉好像很多有不少重复的东西。
+## `docker images` 命令显示的镜像占了好大的空间，怎么办？每次都是下载这么大的镜像？
 
 这个显示的大小是计算后的大小，要知道docker image是分层的，在`1.10`之前，不同镜像无法共享同一层，所以基本上确实是下载大小。但是从`1.10`之后，已有的层（通过SHA256来判断），不需要再下载。只需要下载变化的层。所以实际下载大小比这个数值要小。而且本地硬盘空间占用，也比`docker images`列出来的东西加起来小很多，很多重复的部分共享了。
 
@@ -130,6 +133,61 @@ docker stats $(docker ps --format='{{.Names}}')
 
 https://docs.docker.com/engine/extend/plugins/#volume-plugins
 
+
+## 既然一个容器一个应用，那么我想在该容器中用计划任务 cron 怎么办？
+
+`cron` 其实是另一个服务了，所以应该另起一个容器来进行，如需访问该应用的数据文件，那么可以共享该应用的数据卷即可。而 cron 的容器中，cron 以前台运行即可。
+
+比如，我们希望有个 python 脚本可以定时执行。那么可以这样构建这个容器。
+
+首先基于 python 的镜像定制：
+
+```Dockerfile
+FROM python:3.5.2
+
+ENV TZ=Asia/Shanghai
+
+RUN apt-get update \
+    && apt-get install -y cron \
+    && apt-get autoremove -y
+
+COPY ./cronpy /etc/cron.d/cronpy
+CMD ["cron", "-f"]
+```
+
+其中所提及的 `cronpy` 就是我们需要计划执行的cron脚本。
+
+```bash
+* * * * * root /app/task.py >> /var/log/task.log 2>&1
+```
+
+在这个计划中，我们希望定时执行 `/app/task.py` 文件，日志记录在 `/var/log/task.log` 中。这个 `task.py` 是一个非常简单的文件，其内容只是输出个时间而已。
+
+```python
+#!/usr/local/bin/python
+from datetime import datetime
+print("Cron job has run at {0} with environment variable ".format(str(datetime.now())))
+```
+
+这 `task.py` 可以在构建镜像时放进去，也可以挂载宿主目录。在这里，我以挂载宿主目录举例。
+
+```bash
+# 构建镜像
+docker build -t cronjob:latest .
+
+# 运行镜像
+docker run \
+    --name cronjob \
+    -d \
+    -v $(pwd)/task.py:/app/task.py \
+    -v $(pwd)/log/:/var/log/ \
+    cronjob:latest
+```
+
+需要注意的是，应该在构建主机上赋予 `task.py` 文件可执行权限。
+
+
+
 ## 我用的是阿里云 Ubuntu 14.04 主机，内核还是`3.13`，怎么办？
 
 其实 Ubuntu 14.04 官方维护的内核已经到 `4.4` 了，可以通过下面的命令升级内核：
@@ -142,7 +200,7 @@ sudo apt-get install --install-recommends linux-generic-lts-xenial
 
 # `Dockerfile` 相关问题
 
-## `Dockerfile` 怎么写
+## `Dockerfile` 怎么写？
 
 最直接也是最简单的办法是看官方文档。
 
@@ -305,7 +363,7 @@ https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/7.
 
 # 伟大的墙相关问题
 
-## 安装 Docker
+## 是直接用 yum / apt-get 安装 Docker 吗？
 
 无论是CentOS还是Ubuntu，都不要使用系统源里面的Docker，版本太古老，没法用。
 
@@ -327,11 +385,13 @@ curl -sSL https://get.daocloud.io/docker | sh
 curl -sSL http://acs-public-mirror.oss-cn-hangzhou.aliyuncs.com/docker-engine/internet | sh -
 ```
 
-## 国内使用docker下载镜像很慢
+## docker pull 好慢啊怎么办？
 
-要感恩伟大的墙，所以使用阿里云或者DaoCloud的加速器（也就是代理、镜像）吧：
+要感恩伟大的墙。使用阿里云或者DaoCloud的加速器（也就是代理、镜像）吧：
 
-参考：http://www.imike.me/2016/04/20/Docker%E4%B8%8B%E4%BD%BF%E7%94%A8%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F/
+参考博文：
+
+http://www.imike.me/2016/04/20/Docker%E4%B8%8B%E4%BD%BF%E7%94%A8%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F/
 
 ```bash
  echo "DOCKER_OPTS=\"\$DOCKER_OPTS –registry-mirror=http://your-id.m.daocloud.io -d\"" >> /etc/default/docker
