@@ -15,7 +15,8 @@ function main {
         update) update $@ ;;
         pull)   pull $@ ;;
         server) hexo server ;;
-        *)      echo "Usage: $0 {update|pull|server}" ;;
+        deploy) hexo deploy -g ;;
+        *)      echo "Usage: $0 {update|pull|server|deploy}" ;;
     esac
 }
 
