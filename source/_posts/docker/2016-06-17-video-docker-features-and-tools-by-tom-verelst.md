@@ -143,7 +143,7 @@ docker 集群工具，多宿主管理运行。
 
 而多宿主环境中，使用 docker network 创建 `overlay network`，使用`link`链接主机，则会**有一个内置的DNS进行名字的动态维护**，不再使用 `/etc/hosts`。
 
-在Tom 演示 docker swarm 的时候，我发现他和我一样建立了一个 bash 脚本来启动建立 docker host。我觉得应该考虑做个工具使用 yams 描述文件来建立 docker-machine，就像 docker-compose做的那样。命令行中有太多的重复信息了。
+在Tom 演示 docker swarm 的时候，我发现他和我一样建立了一个 bash 脚本来启动建立 docker host。我觉得应该考虑做个工具使用 yaml 描述文件来建立 docker-machine，就像 docker-compose做的那样。命令行中有太多的重复信息了。
 
 脚本最后是使用 docker network 创建 `overlay` 网络，Tom 提到一点，需要指定  `--subnet` ，否则将无法连通，特别是跨主机的时候，有的版本有bug，同一个网络不一定使用同一段IP地址。不过现在这个bug已经修复了，不指定地址跨主机没问题。
 
