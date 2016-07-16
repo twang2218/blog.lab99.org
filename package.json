@@ -5,6 +5,12 @@
   "hexo": {
     "version": "3.2.2"
   },
+  "scripts": {
+    "update": "git submodule update --recursive",
+    "pull": "git pull --recurse-submodules",
+    "server": "hexo server",
+    "deploy": "hexo deploy -g"
+  },
   "dependencies": {
     "hexo": "^3.2.0",
     "hexo-deployer-git": "^0.2.0",
