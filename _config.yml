@@ -69,6 +69,7 @@ toc:
 ### hexo-tag-owl
 owl:
     css: default
+    file: style/owl.css
 
 ## Themes: https://hexo.io/themes/
 theme: jekyll
