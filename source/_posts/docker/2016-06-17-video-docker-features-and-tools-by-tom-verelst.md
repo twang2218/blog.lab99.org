@@ -1,16 +1,18 @@
 ---
 layout: post
 category: docker
-title: 视频笔记：Docker features and tools by Tom Verelst
+title: 视频笔记：Docker 特性及其相关工具 - Tom Verelst
 date: 2016-06-17
 tags: [docker, youtube, video, notes]
 ---
 
 <!-- toc -->
 
-{% youtube heBI7oQvHZU %}
-
+{% owl youtube heBI7oQvHZU %}
 <https://www.youtube.com/watch?v=heBI7oQvHZU>
+
+{% owl tencent o03134mlm8j %}
+<http://v.qq.com/page/o/8/j/o03134mlm8j.html>
 
 # 基本介绍
 
