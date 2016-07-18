@@ -68,7 +68,7 @@ toc:
 
 ### hexo-tag-owl
 owl:
-    css: default
+    css: custom
     file: style/owl.css
 
 ## Themes: https://hexo.io/themes/
