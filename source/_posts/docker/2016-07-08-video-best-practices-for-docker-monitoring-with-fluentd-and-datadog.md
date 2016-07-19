@@ -10,7 +10,7 @@ tags: [docker, youtube, video, notes]
 
 # 视频信息
 
-DockerCon 16 - Best Practices for Docker monitoring with Fluentd and Datadog
+Best Practices for Docker monitoring with Fluentd and Datadog
 by John Hammink
 (2015/08/11)
 
