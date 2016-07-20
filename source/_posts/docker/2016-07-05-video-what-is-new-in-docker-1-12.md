@@ -1,9 +1,9 @@
 ---
 layout: post
 category: docker
-title: 视频笔记：Docker 1.12 新功能
+title: 视频笔记：Docker 1.12 新功能 - Mike Goelzer
 date: 2016-07-05
-tags: [docker, youtube, video, notes]
+tags: [docker, dockercon16, youtube, notes]
 ---
 
 <!-- toc -->

@@ -3,7 +3,7 @@ layout: post
 category: docker
 title: 视频笔记：介绍 Raft 算法 (CoreOS Fest 2015) - Diego Ongaro
 date: 2016-06-23
-tags: [docker, youtube, video, notes]
+tags: [docker, coreos, youtube, notes]
 ---
 
 <!-- toc -->

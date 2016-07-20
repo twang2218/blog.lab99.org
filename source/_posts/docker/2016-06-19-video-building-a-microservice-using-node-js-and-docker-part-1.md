@@ -1,9 +1,9 @@
 ---
 layout: post
 category: docker
-title: 视频笔记：使用 Node.js 和 Docker 构建微服务 - 第一讲 - Raziel Tabib
+title: 视频笔记：使用 Node.js 和 Docker 构建微服务 - 第1讲 - Raziel Tabib
 date: 2016-06-19
-tags: [docker, youtube, video, notes]
+tags: [docker, node.js, youtube, notes]
 ---
 
 <!-- toc -->
@@ -17,8 +17,8 @@ by Raziel Tabib
 {% owl youtube PJ95WY2DqXo %}
 <https://www.youtube.com/watch?v=PJ95WY2DqXo>
 
-{% owl tencent  %}
-<http://v.qq.com/page/o/8/j/.html>
+{% owl tencent x031573jtih %}
+<http://v.qq.com/page/o/8/j/x031573jtih.html>
 
 # 步骤
 

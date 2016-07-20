@@ -3,7 +3,7 @@ layout: post
 category: docker
 title: 视频笔记：在容器内思考 - 一个持续部署的故事 - Maxfield Stewart
 date: 2016-07-07
-tags: [docker, youtube, video, notes]
+tags: [docker, dockercon16, youtube, notes]
 ---
 
 <!-- toc -->

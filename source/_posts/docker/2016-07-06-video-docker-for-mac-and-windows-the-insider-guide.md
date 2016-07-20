@@ -1,9 +1,9 @@
 ---
 layout: post
 category: docker
-title: 视频笔记：Docker for Mac and Windows - 深入指南
+title: 视频笔记：Docker for Mac and Windows - 深入指南 - Justin Cormack
 date: 2016-07-06
-tags: [docker, youtube, video, notes]
+tags: [docker, dockercon16, youtube, notes]
 ---
 
 <!-- toc -->

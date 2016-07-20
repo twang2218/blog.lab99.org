@@ -3,7 +3,7 @@ layout: post
 category: docker
 title: 视频笔记：Docker 在线交流会 39 - Docker 安全 - Nathan McCauley
 date: 2016-06-19
-tags: [docker, meetup, youtube, video, notes]
+tags: [docker, meetup, youtube, notes]
 ---
 
 <!-- toc -->

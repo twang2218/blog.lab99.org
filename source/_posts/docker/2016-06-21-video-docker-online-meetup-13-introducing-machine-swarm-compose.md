@@ -3,7 +3,7 @@ layout: post
 category: docker
 title: 视频笔记：Docker 在线交流会 13 - 介绍 Machine, Swarm, Compose
 date: 2016-06-20
-tags: [docker, youtube, video, notes]
+tags: [docker, meetup, youtube, notes]
 ---
 
 <!-- toc -->

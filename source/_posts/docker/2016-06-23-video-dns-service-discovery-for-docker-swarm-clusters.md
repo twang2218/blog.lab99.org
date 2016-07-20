@@ -3,7 +3,7 @@ layout: post
 category: docker
 title: 视频笔记：为 Docker Swarm 设计的 DNS 服务发现 - Ahmet Alp Balkan
 date: 2016-06-23
-tags: [docker, youtube, video, notes]
+tags: [docker, dockercon15-eu, youtube, notes]
 ---
 
 <!-- toc -->
@@ -11,7 +11,8 @@ tags: [docker, youtube, video, notes]
 # 视频信息
 
 DNS Service Discovery for Docker Swarm Clusters
-by Ahmet Alp Balkan, Microsoft (2015/12/7)
+by Ahmet Alp Balkan, Microsoft
+(2015/12/7)
 
 {% owl youtube WXESsPqC8to %}
 

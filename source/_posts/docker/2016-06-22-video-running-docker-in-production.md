@@ -3,7 +3,7 @@ layout: post
 category: docker
 title: 视频笔记：生产环境中使用 Docker 必需有一个很好地私有 Registry
 date: 2016-06-22
-tags: [docker, youtube, video, notes]
+tags: [docker, Sonatype, youtube, notes]
 ---
 
 <!-- toc -->

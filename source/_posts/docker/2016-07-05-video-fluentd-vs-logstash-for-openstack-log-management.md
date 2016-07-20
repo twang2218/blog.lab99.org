@@ -3,7 +3,7 @@ layout: post
 category: docker
 title: 视频笔记：对于 OpenStack 日志管理而言 Fluentd 和 Logstash 对比 - Masaki Matsushita
 date: 2016-07-05
-tags: [fluentd, logstash, youtube, video, notes]
+tags: [fluentd, logstash, youtube, notes]
 ---
 
 <!-- toc -->

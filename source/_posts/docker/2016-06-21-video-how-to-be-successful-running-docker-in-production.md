@@ -3,7 +3,7 @@ layout: post
 category: docker
 title: 视频笔记：如何成功在生产环境中运行 Docker - John Fiedler
 date: 2016-06-21
-tags: [docker, youtube, video, notes]
+tags: [docker, dockercon15-eu, youtube, notes]
 ---
 
 <!-- toc -->

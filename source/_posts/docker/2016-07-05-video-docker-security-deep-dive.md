@@ -3,7 +3,7 @@ layout: post
 category: docker
 title: 视频笔记：Docker 安全探究
 date: 2016-07-05
-tags: [docker, youtube, video, notes]
+tags: [docker, dockercon16, youtube, notes]
 ---
 
 <!-- toc -->

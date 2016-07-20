@@ -3,7 +3,7 @@ layout: post
 category: docker
 title: 视频笔记：Containerd - 构建容器 Supervisor - Michael Crosby
 date: 2016-07-11
-tags: [docker, youtube, video, notes]
+tags: [docker, dockercon16, youtube, notes]
 ---
 
 <!-- toc -->

@@ -3,7 +3,7 @@ layout: post
 category: docker
 title: 视频笔记：runC - 一个可以运行 Docker 容器的小引擎 - Phil Estes
 date: 2016-07-11
-tags: [docker, youtube, video, notes]
+tags: [docker, dockercon16, youtube, notes]
 ---
 
 <!-- toc -->
@@ -16,6 +16,10 @@ by Phil Estes from IBM Cloud (@estesp)
 {% owl youtube ZAhzoz2zJj8 %}
 
 <https://www.youtube.com/watch?v=ZAhzoz2zJj8>
+
+{% owl tencent d0314aalgwo %}
+
+<http://v.qq.com/x/page/d0314aalgwo.html>
 
 # 自我介绍
 

@@ -3,7 +3,7 @@ layout: post
 category: docker
 title: 视频笔记：Fluentd 和 Docker 架构 2015 - Kiyoto Tamura
 date: 2016-07-04
-tags: [docker, youtube, video, notes]
+tags: [docker, fluentd, youtube, notes]
 ---
 
 <!-- toc -->

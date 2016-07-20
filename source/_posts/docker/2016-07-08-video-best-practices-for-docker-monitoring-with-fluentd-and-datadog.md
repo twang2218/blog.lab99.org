@@ -3,7 +3,7 @@ layout: post
 category: docker
 title: 视频笔记：用 Fluentd 和 Datadog 监视 Docker 的最佳实践 - John Hammink
 date: 2016-07-08
-tags: [docker, youtube, video, notes]
+tags: [docker, fluentd, vimeo, notes]
 ---
 
 <!-- toc -->
@@ -18,7 +18,8 @@ by John Hammink
 
 <https://vimeo.com/137998663>
 
-视频笔记：
+{% owl tencent d0314vikb0b %}
+<http://v.qq.com/x/page/d0314vikb0b.html>
 
 # Fluentd: Unified Logging Layer
 

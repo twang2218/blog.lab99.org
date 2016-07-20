@@ -3,7 +3,7 @@ layout: post
 category: docker
 title: 视频笔记：Moby 的 Cool Hack session
 date: 2016-07-12
-tags: [docker, youtube, video, notes]
+tags: [docker, dockercon16, youtube, notes]
 ---
 
 <!-- toc -->

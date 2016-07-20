@@ -3,7 +3,7 @@ layout: post
 category: docker
 title: 视频笔记：Docker 在线交流会 28 - Docker Swarm 可以用于生产环境了 - Alexandre Beslic
 date: 2016-06-22
-tags: [docker, youtube, video, notes]
+tags: [docker, meetup, youtube, notes]
 ---
 
 <!-- toc -->

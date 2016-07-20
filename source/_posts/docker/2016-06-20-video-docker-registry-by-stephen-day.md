@@ -3,7 +3,7 @@ layout: post
 category: docker
 title: 视频笔记：Docker Registry - Stephen Day
 date: 2016-06-20
-tags: [docker, youtube, video, notes]
+tags: [docker, dockercon15-sf, youtube, notes]
 ---
 
 <!-- toc -->

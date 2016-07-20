@@ -3,7 +3,7 @@ layout: post
 category: docker
 title: 视频笔记：Docker 特性及其相关工具 - Tom Verelst
 date: 2016-06-17
-tags: [docker, youtube, video, notes]
+tags: [docker, youtube, notes]
 ---
 
 <!-- toc -->

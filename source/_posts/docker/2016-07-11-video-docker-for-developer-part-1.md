@@ -3,7 +3,7 @@ layout: post
 category: docker
 title: 视频笔记：Docker 开发环境 - 第一讲 - David Gageot
 date: 2016-07-11
-tags: [docker, youtube, video, notes]
+tags: [docker, dockercon16, youtube, notes]
 ---
 
 <!-- toc -->
