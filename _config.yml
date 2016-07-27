@@ -60,6 +60,10 @@ time_format: HH:mm:ss
 per_page: 20
 pagination_dir: page
 
+# Comment
+# disqus_shortname: twang2218-coding
+duoshuo_shortname: twang2218-coding
+
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ### hexo-toc
