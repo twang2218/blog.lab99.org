@@ -17,6 +17,10 @@ by Madhu Venugopal, Jana Radhakrishnan
 
 <https://www.youtube.com/watch?v=Gwdo3fo6pZg>
 
+{% owl tencent o0319rxyutt %}
+
+<http://v.qq.com/x/page/o0319rxyutt.html>
+
 # 自我介绍
 
 他们之前工作于 SocketPlane，2015年初，Docker 收购了 SocketPlane，成为今天 Docker Networking 的一部分。

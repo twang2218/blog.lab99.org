@@ -17,6 +17,10 @@ by Brian Goff, Core Engineer, @cpuguy83
 
 <https://www.youtube.com/watch?v=X_q2l8hotAc>
 
+{% owl tencent m03195b0m96 %}
+
+<http://v.qq.com/x/page/m03195b0m96.html>
+
 # 自我介绍
 
 在 GitHub 上叫 [cpuguy83](https://github.com/cpuguy83)。已经使用 Docker 3 年了。曾经部署失败，因为`yaml`的依赖问题，所以后来开始接触 Docker，甚至学习 Go，然后逐步的变为很深入的 Docker 开发人员。
