@@ -5,7 +5,8 @@
       "list-item-indent": false,
       "maximum-line-length": false,
       "table-cell-padding": false,
-      "table-pipe-alignment": false
+      "table-pipe-alignment": false,
+      "table-pipes": false
     }
   }
 }
