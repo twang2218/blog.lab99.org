@@ -1,7 +1,7 @@
 ---
 layout: post
 category: docker
-title: 视频笔记：Docker 运维 - Docker Storage 和 Volumes 深入指南 - Brian Goff
+title: 视频笔记：Docker 运维 - Docker Storage 和 Volumes 进阶指南 - Brian Goff
 date: 2016-07-26
 tags: [docker, dockercon16, youtube, notes]
 ---
