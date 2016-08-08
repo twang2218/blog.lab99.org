@@ -133,7 +133,7 @@ by Jana Radhakrishnan
 
 ## 安全数据层
 
-* 在创建 `overlay` 网络的时候作为选项提供
+* 在创建 `overlay` 网络的时候作为选项提供，注：`--opt secure`
 * 使用 Linux 内核 `IPSec` 驱动
 * 按需通道设置
 * Swarm 原生密钥交换
