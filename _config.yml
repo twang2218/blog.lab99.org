@@ -66,11 +66,11 @@ markdown:
     render:
         html: true
     anchors:
-        level: 1
+        level: 2
         collisionSuffix: 'v'
         permalink: true
         permalinkClass: header-anchor
-        permalinkSymbol: '§ '
+        permalinkSymbol: §
 
 # Comment
 # disqus_shortname: twang2218-coding
