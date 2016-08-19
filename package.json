@@ -9,6 +9,7 @@
     "update": "git submodule update --recursive",
     "pull": "git pull --recurse-submodules",
     "server": "hexo server",
+    "sass": "cd themes/jekyll && npm run sass && cd ../../",
     "deploy": "hexo deploy -g"
   },
   "dependencies": {
@@ -19,7 +20,7 @@
     "hexo-generator-index": "^0.2.0",
     "hexo-generator-tag": "^0.2.0",
     "hexo-renderer-jade": "^0.3.0",
-    "hexo-renderer-marked": "^0.2.10",
+    "hexo-renderer-markdown-it": "^3.4.1",
     "hexo-renderer-stylus": "^0.3.1",
     "hexo-server": "^0.2.0",
     "hexo-tag-owl": "^1.2.1",
