@@ -70,6 +70,7 @@ duoshuo_shortname: twang2218-coding
 toc:
     maxdepth: 3
     slugify: transliteration
+    anchor: true
 
 ### hexo-tag-owl
 owl:
