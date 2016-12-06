@@ -10,11 +10,24 @@ tags: [docker, blog]
 
 # 前言
 
-`Docker 1.13` 马上就要发布了，现在已经进入 Release Candidate 阶段了。从 `1.12` 发布以来，已经过去快 4 个月了，对于活跃的 Docker 社区来说，已经很久了，让我们看看都 `1.13` 都新增了什么内容吧。
+`Docker 1.13` 马上就要发布了。从 7 月 29 日发布 `1.12` 发布以来，已经过去 4 个多月了，对于活跃的 Docker 社区来说，已经很久了，让我们看看都 `1.13` 都新增了什么内容吧。
 
-`1.13` 有[近一千多个 issue/pull request](https://github.com/docker/docker/milestone/56)，是历史上最高的。这并不是一个小的版本变化，里面有大量的更新。
+`1.13` 有[一千二百多个 issue/pull request](https://github.com/docker/docker/milestone/56)，四千多个 commits，是历史上最高的。这并不是一个简单的小版本变化，里面有大量的更新。
 
-要想测试 `1.13.0-rc2` 的新功能，可以起一个新的机器，然后在里面运行：`curl -fsSL https://test.docker.com/ | sh`。
+*要想测试 `1.13.0` 的新功能，可以起一个新的机器，然后在里面运行：`curl -fsSL https://test.docker.com/ | sh`，这样会安装最新的测试版本。*
+
+## Top 10 新增功能
+
+* 1、正式支持服务栈 `docker stack`
+* 2、正式支持插件：`docker plugin`
+* 3、添加在 Swarm 集群环境下对密码、密钥管理的 `secret` 管理服务：`docker secret`
+* 4、增加 `docker system` 命令
+* 5、可以直接使用 `docker-compose.yml` 进行服务部署
+* 6、添加 `docker service` 滚动升级出故障后回滚的功能
+* 7、增加强制再发布选项 `docker service update --force`
+* 8、允许 `docker service create` 映射宿主端口，而不是边界负载均衡网络端口
+* 9、允许 `docker run` 连入指定的 swarm mode 的 `overlay` 网络
+* 10、解决中国 `GFW` 墙掉 `docker-engine` `apt`/`yum` 源的问题
 
 # Docker 镜像构建
 
@@ -300,80 +313,6 @@ Run 'docker plugin COMMAND --help' for more information on a command.
 
 # 命令行
 
-## 支持直接从 `docker-compose.yml` 文件部署二代集群服务
-
-1.12 中引入了二代 Swarm，也就是 Swarm Mode。由于基础理念变化很大，因此先行实现比较基本的服务(`service`)，但是针对应用/服务栈(`stack`)没有成熟的方案。只是试行使用 `DAB` 文件进行集群部署。但是 `DAB` 是 `JSON` 文件，而且撰写较为复杂。相对大家已经习惯的 `docker-compose.yml` 却无法在 `docker stack` 中直接使用。只可以用 `docker-compose bundle` 命令将 `docker-compose.yml` 转换为 `.dab` 文件，然后才能拿到集群部署，而且很多功能用不了。
-
-从 1.13 开始，将允许直接使用 `docker-compose.yml` 文件来进行部署，大大方便了习惯了 `docker compose` 的用户。不过需要注意的是，由于概念差异，原有的 `docker-compose.yml` `v2` 格式无法使用，必须使用 `v3` 格式。幸运的是 `v3` 和 `v2` 格式差距不大。
-
-首先，显然第一行的 `version: '2'` 需要换成 `version: '3'`，其次，服务里的 `build` 显然用不了了。以我写的 LNMP 为例，改成 `v3` 格式，就应该是：
-
-```yaml
-version: '3'
-services:
-    nginx:
-        image: "twang2218/lnmp-nginx:v1.2"
-        ports:
-            - "80:80"
-        networks:
-            - frontend
-        depends_on:
-            - php
-    php:
-        image: "twang2218/lnmp-php:v1.2"
-        networks:
-            - frontend
-            - backend
-        environment:
-            MYSQL_PASSWORD: Passw0rd
-        depends_on:
-            - mysql
-    mysql:
-        image: mysql:5.7
-        volumes:
-            - mysql-data:/var/lib/mysql
-        environment:
-            TZ: 'Asia/Shanghai'
-            MYSQL_ROOT_PASSWORD: Passw0rd
-        command: ['mysqld', '--character-set-server=utf8']
-        networks:
-            - backend
-volumes:
-    mysql-data:
-networks:
-    frontend:
-    backend:
-```
-
-如果在 swarm 环境部署该服务栈的话，使用命令：
-
-```bash
-$ docker stack deploy --compose-file docker-compose.yml lnmp
-Creating network lnmp_frontend
-Creating network lnmp_backend
-Creating network lnmp_default
-Creating service lnmp_mysql
-Creating service lnmp_nginx
-Creating service lnmp_php
-```
-
-然后可以用 `docker stack ls` 或 `docker stack ps` 来查看服务栈状态：
-
-```bash
-$ docker stack ls
-NAME  SERVICES
-lnmp  3
-$ docker stack ps lnmp
-NAME                       IMAGE                      NODE  DESIRED STATE  CURRENT STATE           ERROR  PORTS
-lnmp_mysql.1.hfz88yeej0ve  mysql:5.7                  d2    Running        Running 9 seconds ago
-lnmp_php.1.kqk4xgr7ajn4    twang2218/lnmp-php:v1.2    d1    Running        Running 10 seconds ago
-lnmp_nginx.1.arrrnbuzgq9t  twang2218/lnmp-nginx:v1.2  d2    Running        Running 5 seconds ago
-```
-
-由于默认使用的就是 `ingress` 边界负载均衡网络映射的 `80` 端口，因此我们可以访问任意节点来查看页面，享受二代 Swarm 给我们带来的好处。
-
-删掉 `stack`，只需要简单地 `docker stack rm lnmp` 即可。不过需要注意的是，所有的命名卷不会被删除，如需删除，需要手动的去各个容器所在节点去 `docker volume rm` 卷。
-
 ## 试验 `checkpoint` 功能
 
 可以将运行的容器保存 checkpoint，在将来可以 restore。因此引入 `docker checkpoint` 命令。
@@ -452,6 +391,82 @@ Error opening terminal: unknown.
 
 # Swarm Mode
 
+## 正式支持 `docker stack`
+
+从 1.13 开始，正式支持 `docker stack`，并支持直接从 `docker-compose.yml` 文件部署二代 Swarm 集群服务。
+
+1.12 中引入了二代 Swarm，也就是 Swarm Mode。由于基础理念变化很大，因此先行实现比较基本的服务(`service`)，但是针对应用/服务栈(`stack`)没有成熟的方案。只是试行使用 `DAB` 文件进行集群部署。但是 `DAB` 是 `JSON` 文件，而且撰写较为复杂。相对大家已经习惯的 `docker-compose.yml` 却无法在 `docker stack` 中直接使用。只可以用 `docker-compose bundle` 命令将 `docker-compose.yml` 转换为 `.dab` 文件，然后才能拿到集群部署，而且很多功能用不了。
+
+从 1.13 开始，将允许直接使用 `docker-compose.yml` 文件来进行部署，大大方便了习惯了 `docker compose` 的用户。不过需要注意的是，由于概念差异，原有的 `docker-compose.yml` `v2` 格式无法使用，必须使用 `v3` 格式。幸运的是 `v3` 和 `v2` 格式差距不大。
+
+首先，显然第一行的 `version: '2'` 需要换成 `version: '3'`，其次，服务里的 `build` 显然用不了了。以我写的 LNMP 为例，改成 `v3` 格式，就应该是：
+
+```yaml
+version: '3'
+services:
+    nginx:
+        image: "twang2218/lnmp-nginx:v1.2"
+        ports:
+            - "80:80"
+        networks:
+            - frontend
+        depends_on:
+            - php
+    php:
+        image: "twang2218/lnmp-php:v1.2"
+        networks:
+            - frontend
+            - backend
+        environment:
+            MYSQL_PASSWORD: Passw0rd
+        depends_on:
+            - mysql
+    mysql:
+        image: mysql:5.7
+        volumes:
+            - mysql-data:/var/lib/mysql
+        environment:
+            TZ: 'Asia/Shanghai'
+            MYSQL_ROOT_PASSWORD: Passw0rd
+        command: ['mysqld', '--character-set-server=utf8']
+        networks:
+            - backend
+volumes:
+    mysql-data:
+networks:
+    frontend:
+    backend:
+```
+
+如果在 swarm 环境部署该服务栈的话，使用命令：
+
+```bash
+$ docker stack deploy --compose-file docker-compose.yml lnmp
+Creating network lnmp_frontend
+Creating network lnmp_backend
+Creating network lnmp_default
+Creating service lnmp_mysql
+Creating service lnmp_nginx
+Creating service lnmp_php
+```
+
+然后可以用 `docker stack ls` 或 `docker stack ps` 来查看服务栈状态：
+
+```bash
+$ docker stack ls
+NAME  SERVICES
+lnmp  3
+$ docker stack ps lnmp
+NAME                       IMAGE                      NODE  DESIRED STATE  CURRENT STATE           ERROR  PORTS
+lnmp_mysql.1.hfz88yeej0ve  mysql:5.7                  d2    Running        Running 9 seconds ago
+lnmp_php.1.kqk4xgr7ajn4    twang2218/lnmp-php:v1.2    d1    Running        Running 10 seconds ago
+lnmp_nginx.1.arrrnbuzgq9t  twang2218/lnmp-nginx:v1.2  d2    Running        Running 5 seconds ago
+```
+
+由于默认使用的就是 `ingress` 边界负载均衡网络映射的 `80` 端口，因此我们可以访问任意节点来查看页面，享受二代 Swarm 给我们带来的好处。
+
+删掉 `stack`，只需要简单地 `docker stack rm lnmp` 即可。不过需要注意的是，所有的命名卷不会被删除，如需删除，需要手动的去各个容器所在节点去 `docker volume rm` 卷。
+
 ## 添加 `secret` 管理
 
 从 1.13 开始，Docker 提供了集群环境的 `secret` 管理机制，从而可以更好地在集群环境中管理密码、密钥等敏感信息。
@@ -529,8 +544,18 @@ Swarm Mode 启动服务还有一个麻烦的问题就是查看日志很麻烦。
 
 从 1.13 开始，实验性的提供了 `docker service logs` 命令，用以达到类似的功能。不过这是试验功能，因此必须在启用试验模式后(`dockerd --experimental`)，才可以使用。
 
+## 增加强制再发布选项 `docker service update --force`
+
+在生产环境使用 `docker swarm mode` 的过程中，很可能会碰到这样的问题，当一个节点挂掉了，修复重启该节点后，发现原来该节点跑的服务被调度到了别的节点上。这是正常的，swarm manager 的介入保证了服务的可用性。可是节点恢复后，除非运行新的服务，或者某个别的节点挂掉，否则这个新修复的节点就一直闲着，因为服务副本数满足需求，所以 swarm manager 不会介入重新调度。
+
+这个问题在集群扩容后，问题就更加明显，新扩容的节点，最初都是空闲的。在 1.12 唯一的解决办法就是我们改点儿什么东西，从而触发 swarm 的升级行为。但是这显然不是好办法。
+
+在 1.13，引入了 `docker service update --force` 功能，可以在服务未发生改变时，强制触发再发布的流程，也就是强制重新 `pull` 该镜像、停止容器，重新调度运行容器。这样会让由于各种维护导致的集群负载不平衡的情况得到缓解，再次平衡集群。由于这是 `docker service update` 命令，因此也会遵循所指定的 `--update-parallelism` 和 `--update-delay` 的设置，进行滚动更新。
+
+Add force option to service update #27596
+
 # 废弃
 
-* 废弃 docker daemon 命令，用 dockerd 取代。其实 1.12 已经换了
-* 移除对 Ubuntu 15.10、Fedora 22 的支持，这两个都 EOL 了。
-* 废弃 Dockerfile 中的 MAINTAINER 指令，如果需要可以用 LABEL maintainer=<...> 代替
+* 废弃 `docker daemon` 命令，用 `dockerd` 取代。其实 1.12 已经换了
+* 移除对 Ubuntu 15.10、Fedora 22 的支持，因为这两个都 EOL 了。
+* 废弃 `Dockerfile` 中的 `MAINTAINER` 指令，如果需要可以用 `LABEL maintainer=<...>` 代替
