@@ -42,7 +42,7 @@ Digest: sha256:532a19da83ee0e4e2a2ec6bc4212fc4af26357c040675d5c2629a4e4c4563cef
 Status: Downloaded newer image for mongo:3.2
 ```
 
-然后我们使用更新后的 Dockerfile 构建镜像时，如果加上 `--cache-from mongo:3.2` 后，会发现如果是已经在 `mongo:3.2` 中存在并没有修改的层，就会用 `mongo:3.2` 中的该层做缓存。
+然后我们使用更新后的 `Dockerfile` 构建镜像时，如果加上 `--cache-from mongo:3.2` 后，会发现如果是已经在 `mongo:3.2` 中存在并没有修改的层，就会用 `mongo:3.2` 中的该层做缓存。
 
 ```bash
 $ docker build --cache-from mongo:3.2 -t mongo:3.2.1 .
@@ -61,13 +61,13 @@ Step 4/18 : ENV GOSU_VERSION 1.7
 ...
 ```
 
-## 压扁(squash)镜像（实验阶段）
+## 压扁(`squash`)镜像（实验阶段）
 
-对于总是把 Dockerfile 当做 bash 文件来用的人，会发现很快由于太多的 RUN 导致镜像有特别多的层，镜像超级臃肿，而且甚至会碰到超出最大层数限制的问题。这些人往往不从自身找问题，反而去寻找旁门左道，比如导出镜像做一些特殊处理，合并为一层，然后再导入等等，这种做法是很错误的，除了导致构建缓存失败外，还导致 `docker history` 丢失，导致镜像变为黑箱镜像。其实正确的做法是遵循 Dockerfile 最佳实践，应该把多个命令合并为一个 RUN，每一个 RUN 要精心设计，确保安装构建最后进行清理。这样才可以降低镜像体积，以及最大化的利用构建缓存。
+对于总是把 `Dockerfile` 当做 `bash` 文件来用的人，会发现很快由于太多的 `RUN` 导致镜像有特别多的层，镜像超级臃肿，而且甚至会碰到超出最大层数限制的问题。这些人往往不从自身找问题，反而去寻找旁门左道，比如导出镜像做一些特殊处理，合并为一层，然后再导入等等，这种做法是很错误的，除了导致构建缓存失败外，还导致 `docker history` 丢失，导致镜像变为黑箱镜像。其实正确的做法是遵循 `Dockerfile` 最佳实践，应该把多个命令合并为一个 `RUN`，每一个 `RUN` 要精心设计，确保安装构建最后进行清理。这样才可以降低镜像体积，以及最大化的利用构建缓存。
 
-在 Docker 1.13 中，为了应对这群用户，实验性的提供了一个 `--squash` 参数给 `docker build`，其功能就是如上所说，将 Dockerfile 中所有的操作，压缩为一层。不过，与旁门左道不同，它保留了 `docker history`。
+在 Docker 1.13 中，为了应对这群用户，实验性的提供了一个 `--squash` 参数给 `docker build`，其功能就是如上所说，将 `Dockerfile` 中所有的操作，压缩为一层。不过，与旁门左道不同，它保留了 `docker history`。
 
-比如如下的 Dockerfile：
+比如如下的 `Dockerfile`：
 
 ```Dockerfile
 FROM busybox
@@ -98,7 +98,7 @@ e02e811dd08f        5 weeks ago          /bin/sh -c #(nop)  CMD ["sh"]          
 docker build -t mysquash --squash .
 ```
 
-其 history 则是这样子：
+其 `history` 则是这样子：
 
 ```bash
 $ docker history mysquash
@@ -119,9 +119,9 @@ a557e397ff56        15 seconds ago                                              
 
 # 安装
 
-## 解决 GFW 影响 Docker 安装问题
+## 解决 `GFW` 影响 `Docker` 安装问题
 
-官方的 apt/yum 源使用的是 AWS 的服务，并且为了确保安全使用了 HTTPS，因此伟大的墙很乐于干扰大家使用。没办法的情况下，各个云服务商纷纷建立自己官方源镜像，阿里云、DaoCloud、Azura 等等，并且自己做了个修订版的 `https://get.docker.com` 的脚本来进行安装。
+官方的 `apt`/`yum` 源使用的是 `AWS` 的服务，并且为了确保安全使用了 `HTTPS`，因此伟大的墙很乐于干扰大家使用。没办法的情况下，各个云服务商纷纷建立自己官方源镜像，阿里云、DaoCloud、Azura 等等，并且自己做了个修订版的 `https://get.docker.com` 的脚本来进行安装。
 
 现在这个发生改变了，官方的 `https://get.docker.com` 将支持 `--mirror` 参数，你可以用这个参数指定国内镜像源，目前支持微软的 Azure 云，（[或阿里云？](https://github.com/docker/docker/pull/28858)）。使用方法如下，将原来官网安装命令：
 
@@ -141,31 +141,31 @@ curl -sSL https://get.docker.com/ | sh -s -- --mirror AzureChinaCloud
 
 ## 增加更多的系统支持
 
-在这次发布中，增加了 `Ubuntu 16.10` 的安装包，而且对 Ubuntu 系统增加了 PPC64LE 和 s390x 构架的安装包。此外，还正式支持了 VMWare Photon OS 系统的 RPM 安装包，以及在 `https://get.docker.com` 的支持。并且支持了 Fedora 25。同时也由于一些系统生命周期的结束，而被移除支持，比如 Ubuntu 15.10、Fedora 22 都不在支持了。
+在这次发布中，增加了 `Ubuntu 16.10` 的安装包，而且对 `Ubuntu` 系统增加了 `PPC64LE` 和 `s390x` 构架的安装包。此外，还正式支持了 `VMWare Photon OS` 系统的 `RPM` 安装包，以及在 `https://get.docker.com` 的支持。并且支持了 `Fedora 25`。同时也由于一些系统生命周期的结束，而被移除支持，比如 `Ubuntu 15.10`、`Fedora 22` 都不在支持了。
 
 # 网络
 
 ## 允许 `docker run` 连入指定的 `swarm mode` 的网络
 
-在 Docker 1.12 发布新的 Swarm Mode 之后，很多人都问过这样的问题，怎么才能让 docker run 连入服务的 overlay 网络中去？答案是不可以，因为 swarm 的 overaly 是为了 swarm service 准备的，相对更健壮，而直接使用 docker run，会破坏了这里面的安全模型。
+在 Docker 1.12 发布新的 Swarm Mode 之后，很多人都问过这样的问题，怎么才能让 `docker run` 连入服务的 `overlay` 网络中去？答案是不可以，因为 `swarm` 的 `overaly` 是为了 `swarm service` 准备的，相对更健壮，而直接使用 `docker run`，会破坏了这里面的安全模型。
 
 但是由于大家需求很多，于是提供了一种折衷的办法。1.13 允许建立网络的时候，设定该网络为 `attachable`，允许之后的 `docker run` 的容器连接到该网络上。
 
-我们创建一个不允许之后 attach 的网络：
+我们创建一个不允许之后 `attach` 的网络：
 
 ```bash
 $ docker network create -d overlay mynet1
 xmgoco2vfrtp0ggc5r0p5z4mg
 ```
 
-然后再创建一个允许 attach 的网络，这里会使用 1.13 新加入的 `--attachable` 参数：
+然后再创建一个允许 `attach` 的网络，这里会使用 1.13 新加入的 `--attachable` 参数：
 
 ```bash
 $ docker network create -d overlay --attachable mynet2
 yvcyhoc6ni0436jux9azc4cjt
 ```
 
-然后我们启动一个 web 服务，连入这两个网络：
+然后我们启动一个 `web` 服务，连入这两个网络：
 
 ```bash
 $ docker service create \
@@ -254,23 +254,23 @@ root@d3:~$ curl localhost
 ...
 ```
 
-## iptables 的转发规则将默认拒绝
+## `iptables` 的转发规则将默认拒绝
 
-Change the default FORWARD policy to DROP #28257
+从默认允许改为默认拒绝，从而避免容器外露的问题。
 
-## 在 docker network inspect 里显示连入节点
+## 在 `docker network inspect` 里显示连入节点
 
 Show peer nodes in docker network inspect for swarm overlay networks #28078
 
-## 允许 service VIP 可以被 ping
+## 允许 `service` `VIP` 可以被 `ping`
 
-在 1.12 的二代 Swarm 排障过程中，常见的一个问题就是跨节点的服务 VIP 不可以 `ping`，所以很多时候很多时候搞不懂是 overlay 网络不通呢？还是服务没起来？还是服务发现有问题？这个问题在 1.13 解决了，VIP 可以随便 ping，跨宿主也没关系。
+在 1.12 的二代 Swarm 排障过程中，常见的一个问题就是跨节点的服务 VIP 不可以 `ping`，所以很多时候很多时候搞不懂是 `overlay` 网络不通呢？还是服务没起来？还是服务发现有问题？这个问题在 1.13 解决了，VIP 可以随便 `ping`，跨宿主也没关系。
 
 # 插件
 
 ## 插件功能正式启用
 
-在 1.12 引入了插件概念后，作为试验特性得到了很多关注。包括服务端的 Docker Store 开始准备上线，以及第三方的插件的开发。现在 1.13 插件作为正式功能提供了。
+在 1.12 引入了插件概念后，作为试验特性得到了很多关注。包括服务端的 [Docker Store](https://store.docker.com/) 开始准备上线，以及第三方的插件的开发。现在 1.13 插件作为正式功能提供了。
 
 ```bash
 $ docker plugin
@@ -296,15 +296,15 @@ Commands:
 Run 'docker plugin COMMAND --help' for more information on a command.
 ```
 
-相比于 1.12 的试验版本而言，增加了 `docker plugin create` 命令，方便创建插件。
+相比于 1.12 的试验版本而言，增加了 `docker plugin create` 命令，指定 `rootfs` 和 `config.json` 即可创建插件。
 
 # 命令行
 
-## 支持直接从 docker-compose.yml 文件部署二代集群服务
+## 支持直接从 `docker-compose.yml` 文件部署二代集群服务
 
-1.12 中引入了二代 Swarm，也就是 Swarm Mode。由于基础理念变化很大，因此先行实现比较基本的服务(service)，但是针对应用/服务栈(stack)没有成熟的方案。只是试行使用 DAB 文件进行集群部署。但是 DAB 是 JSON 文件，而且撰写较为复杂。相对大家已经习惯的 `docker-compose.yml` 却无法在 docker stack 中直接使用。只可以用 `docker-compose bundle` 命令将 `docker-compose.yml` 转换为 `.dab` 文件，然后才能拿到集群部署，而且很多功能用不了。
+1.12 中引入了二代 Swarm，也就是 Swarm Mode。由于基础理念变化很大，因此先行实现比较基本的服务(`service`)，但是针对应用/服务栈(`stack`)没有成熟的方案。只是试行使用 `DAB` 文件进行集群部署。但是 `DAB` 是 `JSON` 文件，而且撰写较为复杂。相对大家已经习惯的 `docker-compose.yml` 却无法在 `docker stack` 中直接使用。只可以用 `docker-compose bundle` 命令将 `docker-compose.yml` 转换为 `.dab` 文件，然后才能拿到集群部署，而且很多功能用不了。
 
-从 1.13 开始，将允许直接使用 `docker-compose.yml` 文件来进行部署，大大方便了习惯了 docker compose 的用户。不过需要注意的是，由于概念差异，原有的 `docker-compose.yml` `v2` 格式无法使用，必须使用 `v3` 格式。幸运的是 `v3` 和 `v2` 格式差距不大。
+从 1.13 开始，将允许直接使用 `docker-compose.yml` 文件来进行部署，大大方便了习惯了 `docker compose` 的用户。不过需要注意的是，由于概念差异，原有的 `docker-compose.yml` `v2` 格式无法使用，必须使用 `v3` 格式。幸运的是 `v3` 和 `v2` 格式差距不大。
 
 首先，显然第一行的 `version: '2'` 需要换成 `version: '3'`，其次，服务里的 `build` 显然用不了了。以我写的 LNMP 为例，改成 `v3` 格式，就应该是：
 
@@ -372,9 +372,9 @@ lnmp_nginx.1.arrrnbuzgq9t  twang2218/lnmp-nginx:v1.2  d2    Running        Runni
 
 由于默认使用的就是 `ingress` 边界负载均衡网络映射的 `80` 端口，因此我们可以访问任意节点来查看页面，享受二代 Swarm 给我们带来的好处。
 
-删掉 stack，只需要简单地 `docker stack rm lnmp` 即可。不过需要注意的是，所有的命名卷不会被删除，如需删除，需要手动的去各个容器所在节点去 `docker volume rm` 卷。
+删掉 `stack`，只需要简单地 `docker stack rm lnmp` 即可。不过需要注意的是，所有的命名卷不会被删除，如需删除，需要手动的去各个容器所在节点去 `docker volume rm` 卷。
 
-## 试验 checkpoint 功能
+## 试验 `checkpoint` 功能
 
 可以将运行的容器保存 checkpoint，在将来可以 restore。因此引入 `docker checkpoint` 命令。
 
@@ -386,11 +386,11 @@ lnmp_nginx.1.arrrnbuzgq9t  twang2218/lnmp-nginx:v1.2  d2    Running        Runni
 
 以前我们如果希望测试当前试验功能，必须添加试验分支源，重装 `docker`。这给测试试验分支带来了困难。现在变得简单了，不在分为两组可执行文件构建，合并为一个。如果需要测试试验功能，直接在 `dockerd` 后添加 `--experimental` 即可。
 
-## 在 overlay2 存储驱动使用于 xfs 时可以添加磁盘配额
+## 在 `overlay2` 存储驱动使用于 `xfs` 时可以添加磁盘配额
 
-在 1.13 之前，只有块设备文件系统驱动（如 devicemapper, xfs, zfs等）支持磁盘配额能力，而所有 Union FS 的驱动，都不支持配额。现在针对使用 XFS 为后端的 `overlay2` 驱动支持了磁盘配额，理论上同样的方式可以在将来移植到 `AUFS`。
+在 1.13 之前，只有块设备文件系统驱动（如 `devicemapper`, `xfs`, `zfs`等）支持磁盘配额能力，而所有 `Union FS` 的驱动，都不支持配额。现在针对使用 `XFS` 为后端的 `overlay2` 驱动支持了磁盘配额，理论上同样的方式可以在将来移植到 `AUFS`。
 
-## 增加 docker system 命令
+## 增加 `docker system` 命令
 
 很多人在以前搞不懂自己的镜像到底占了多少空间、容器占了多少空间，卷占了多少空间。怎么删除不用的东西以释放资源。从 1.13 开始，Docker 提供了一组 `system` 命令来帮助系统管理上的问题。
 
@@ -423,7 +423,7 @@ Containers          3                   3                   15 B                
 Local Volumes       1                   1                   219.4 MB            0 B (0%)
 ```
 
-显示的列表中列出了镜像、容器、本地卷所占用的磁盘空间，以及可能回收的磁盘空间。比如，我们看到镜像有 123MB 的空间可以回收，从 1.13 开始，docker 提供了一组 `prune` 命令，分别是：
+显示的列表中列出了镜像、容器、本地卷所占用的磁盘空间，以及可能回收的磁盘空间。比如，我们看到镜像有 123MB 的空间可以回收，从 1.13 开始，`docker` 提供了一组 `prune` 命令，分别是：
 
 * `docker image prune`：删除无用的镜像
 * `docker container prune`：删除无用的容器
@@ -435,11 +435,11 @@ Local Volumes       1                   1                   219.4 MB            
 
 此外，从上面已经可以看到，从 1.13 开始，命令都开始归类于各个子命令了。之前默认的 `docker info`，`docker ps`，`docker rm`，`docker run` 都开始归类于对应的 `docker image`, `docker container`, `docker system` 下了。目前之前的命令依旧可以使用，会继续保持一段时间。但是从 1.13 开始，推荐使用各个子命令的版本了。
 
-## 提升 overlay2 的优先级
+## 提升 `overlay2` 的优先级
 
 由于 `overlay2` 在 4.+ 内核的系统上趋于稳定，因此将其优先级提到 `devicemapper` 之上（优先级最高的依旧是 `aufs`）
 
-## docker exec -t 自动添加 TERM 环境变量
+## `docker exec -t` 自动添加 TERM 环境变量
 
 对于在容器中使用 `vi`、`htop` 之类工具的人来说是比较方便的。之前由于默认没有定义 `TERM`，这些需要终端页面布局的程序执行可能会不正常。比如：
 
@@ -452,9 +452,9 @@ Error opening terminal: unknown.
 
 # Swarm Mode
 
-## 添加 secret 管理
+## 添加 `secret` 管理
 
-从 1.13 开始，Docker 提供了集群环境的 secret 管理机制，从而可以更好地在集群环境中管理密码、密钥等敏感信息。
+从 1.13 开始，Docker 提供了集群环境的 `secret` 管理机制，从而可以更好地在集群环境中管理密码、密钥等敏感信息。
 
 ```bash
 docker secret --help
@@ -481,13 +481,13 @@ Run 'docker secret COMMAND --help' for more information on a command.
 $ echo "MySuperSecretPassword" | docker secret create mysql_password
 ```
 
-在将来启动服务的时候，就可以通过 `--secret` 选项来指定需要使用哪些 secret。
+在将来启动服务的时候，就可以通过 `--secret` 选项来指定需要使用哪些 `secret`。
 
 ```bash
 $  docker service create --name privateweb --secret mysql_password nginx
 ```
 
-所指定的 secret 会以文件形式挂载于 `/var/run/secrets/` 目录下：
+所指定的 `secret` 会以文件形式挂载于 `/var/run/secrets/` 目录下：
 
 ```bash
 root@d5cec6381df8:/# ls -al /var/run/secrets/
@@ -497,7 +497,7 @@ drwxr-xr-x 4 root root 4096 Dec  6 03:16 ..
 -r--r--r-- 1 root root   22 Dec  6 03:16 mysql_password
 ```
 
-secret 的权限是 `444` 因此非 `root` 用户启动的容器也是可以访问其内容，读取所需的密码或者密钥。
+`secret` 的权限是 `444` 因此容器中的非 `root` 用户也可以访问其内容，读取所需的密码或者密钥，这对于非 root 用户启动的服务很重要。
 
 ```bash
 root@d5cec6381df8:/# cat /var/run/secrets/mysql_password
@@ -508,7 +508,7 @@ MySuperSecretPassword
 
 Docker 1.10 开始引入了 DNS 服务发现，然后在 1.11 进一步支持了 DNS 负载均衡，1.12 开始引入了 VIP 负载均衡。而 1.12 同时还提供了 `HEALTHCHECK` 容器健康检查的能力。但是这两组功能在 1.12 时并没有结合起来。因此可能会出现，容器启动过程中，负载均衡就已经将流量开始导流给这个容器了，从而导致升级过程中部分服务会访问失败。
 
-在 1.13 开始，将利用 Dockerfile 中定义的健康检查功能，来检查容器健康情况。如果容器尚未处于健康状况，所有的负载均衡以及 DNS 服务发现将不会把流量转发给这个新启动的容器，它们会一直等到容器确实已经可以提供服务时，再更新负载均衡以及服务发现。
+在 1.13 开始，将利用 `Dockerfile` 中定义的健康检查功能，来检查容器健康情况。如果容器尚未处于健康状况，所有的负载均衡以及 DNS 服务发现将不会把流量转发给这个新启动的容器，它们会一直等到容器确实已经可以提供服务时，再更新负载均衡以及服务发现。
 
 ## 添加滚动升级回滚的功能
 
@@ -523,7 +523,7 @@ $ docker service update \
   my_web
 ```
 
-## 添加命令 docker service logs 以查看服务日志
+## 添加命令 `docker service logs` 以查看服务日志
 
 Swarm Mode 启动服务还有一个麻烦的问题就是查看日志很麻烦。在 `docker-compose` 中，可以直接 `docker-compose logs <服务名>` 即可查看日志，即使服务是跑在不同节点上，甚至是多个服务副本。但是 `docker service` 不支持 `logs` 命令。因此，现在查看日志比较麻烦，需要 `docker service ps` 查看各个容器都在哪些节点上，然后再一个个进去先 `docker ps` 找到容器 ID，然后在 `docker logs <容器ID>` 查看具体日志。非常繁琐。
 
