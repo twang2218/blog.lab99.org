@@ -5,5 +5,5 @@ node_js:
 git:
   depth: 10
 
-script: npm run generate
-after_success: npm run deploy
+script: yarn generate
+after_success: yarn deploy
