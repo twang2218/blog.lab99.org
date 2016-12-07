@@ -1,0 +1,4 @@
+.git
+node_modules
+themes/jekyll/node_modules
+*.log

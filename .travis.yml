@@ -1,0 +1,9 @@
+language: node_js
+node_js:
+  - "6"
+
+git:
+  depth: 10
+
+script: npm run generate
+after_success: npm run deploy

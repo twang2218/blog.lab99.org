@@ -10,7 +10,8 @@
     "pull": "git pull --recurse-submodules",
     "server": "hexo server",
     "sass": "cd themes/jekyll && npm run sass && cd ../../",
-    "deploy": "hexo deploy -g"
+    "deploy": "hexo deploy -g",
+    "generate": "hexo g"
   },
   "dependencies": {
     "hexo": "^3.2.2",
