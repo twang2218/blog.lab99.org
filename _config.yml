@@ -4,8 +4,8 @@
 
 # Site
 title: 大桥下的蜗牛
-subtitle: 无善无恶心之体，有善有恶意之动，知善知恶是良知，为善去恶是格物。
-description: docker,bigdata,openstack,hadoop,node.js
+description: 无善无恶心之体，有善有恶意之动，知善知恶是良知，为善去恶是格物。
+keywords: docker,bigdata,openstack,hadoop,node.js
 author: 王涛
 language: zh-cn
 timezone: Asia/Shanghai
@@ -88,6 +88,20 @@ owl:
 
 ## Themes: https://hexo.io/themes/
 theme: jekyll
+
+jekyll:
+    project: false
+    selfIntro: true
+    sign_image: image/bear.svg
+
+# Social
+social:
+    github: https://github.com/twang2218
+    coding: https://coding.net/u/twang2218
+
+# Analytics
+google_analytics: UA-80785538-1
+baidu_analytics: //hm.baidu.com/hm.js?ee75cf08ad330aa99f8540efa2570970
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
