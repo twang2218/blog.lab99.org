@@ -25,7 +25,7 @@ CTO @ Infinit
 
 视频链接：<https://www.youtube.com/watch?v=k0m-XwCoxo0>
 
-幻灯链接：<http://www.slideshare.net/Docker/persistent-storage-tailored-for-containers
+幻灯链接：<http://www.slideshare.net/Docker/persistent-storage-tailored-for-containers>
 
 # 容器和存储
 
