@@ -1,6 +1,10 @@
+sudo: required
 language: node_js
 node_js:
   - "6"
+
+services:
+  - docker
 
 git:
   depth: 10
@@ -22,3 +26,6 @@ after_success:
     - du -sh *
     - yarn deploy
     - rm ../coding-deploy-key
+# Build Docker image
+    - docker build -t twang2218/blog.lab99.org .
+    - docker images
