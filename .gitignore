@@ -2,7 +2,7 @@ db.json
 *.log
 public/
 .deploy*/
-themes/jekyll/
+#themes/jekyll/
 
 # Created by https://www.gitignore.io/api/linux,node,osx
 
