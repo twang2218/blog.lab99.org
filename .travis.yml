@@ -10,4 +10,5 @@ before_script:
 script:
     - "yarn generate"
 deploy:
-    - "yarn deploy"
+    provider: script
+    script: "yarn deploy"
