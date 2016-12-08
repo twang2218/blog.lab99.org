@@ -9,15 +9,12 @@ before_script:
     - npm rebuild
 script:
     - yarn generate
-before_deploy:
+after_success:
     - npm install
     - openssl aes-256-cbc -K $encrypted_7cf8ca89b90b_key -iv $encrypted_7cf8ca89b90b_iv -in coding-deploy-key.enc -out ../coding-deploy-key -d
     - eval "$(ssh-agent -s)"
     - chmod 600 ../coding-deploy-key
     - ssh-add ../coding-deploy-key
     - ls -al
-deploy:
-    provider: script
-    script: npm run deploy
-after_deploy:
+    - npm run deploy
     - rm ../coding-deploy-key
