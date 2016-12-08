@@ -6,6 +6,12 @@ node_js:
 services:
   - docker
 
+env:
+    DOCKER_USER:
+        secure: "nURo2XyWFfTU7altqRzPxAfqVrgYpE/W8VNgwjEFmIVdYMP6ukXyUERbCRRxlGR8ADiq0mk3J9jhYDVpwqo8z3z+82snALLeX3KbuNOAWsfVGLi5ryaUkbJAV9Cp2lheklHO9h8F+zL3py3Dsxm3888qHukm35iTnWLLxicIe0WTwtAAadwnDbia3myCQW20dK38QPQtkj4Be1WyDkeFXN+K0nTRFAooo3AV+UFWQ1ETbV+fvyj8+IEOgIcV/u3fXV/QZlI6tlFKoz0VFBLb1W8qc9u3ZSY3NkOF2cUdswbjyDWB+aEOxV9V5RW1LjOAZuWeDJbUg1DLE6B/C/qJ5462RPwFx0/JFb3Jx35+MjNzQXcegPpf6Aj+/d4nNaTksNDhUbfdRs4C8LCCU2J2H0dH88m3A/Y6nLuYvuS7VrQLw3NGvzf+IZ2Qu2gFj3NjLbyw5pXE1IierhX5nIYbvz1gtC4h+uZ1HtVpsf+0fRzfqYTkve4StZ7OYU4NWFnTFBWsUzu4l7s0fqsuhb4a8p4riX0avVoUMY45rmM6YOoILpcSjZffsXPktU9oZ+sueZ+x13MsJ0zaDNjExpDzNqmKrxI8Ntka7tm4WIG+aKlERq+bM9znQgkI1CKD15hbY4dXU06oD//xvdDosVtE0AObHM/ao/ohYD05SCh9q10="
+    DOCKER_PASSWORD:
+        secure: "eNTKIc7qmKxoVCe2/AIWVqxYdfiVLLGMVayVnJhTOiIUh3Yd5rSwj0P6Y2IIaAUxhibtPn6qJD94JRtkiCpf8u4Whp/iFAiYaFVIX1rNFKF59KZvriUk+N/Ce/xH/kbFnrqtRowPa8iZZQSd0qT0z11tAURmNCzkp6cHzCudR8T0gI6Q1xj2OeSOBsJhUa6Nu8jUKcadFzM5k5G/nF2mHwMY1k/6lp4x21CLYNN34EUyQH4OVsqGXZCEjLcXTGctoAXsSommPzBm08SmJPHM5GcFodEpSgY83/nI+IVRP0FdOFukeqQ1ekiQ9gqi6rrGJtLuafnzV/hV0N3RBx+PFP6pr6Mb8UCHTNlX2we41hz/DMvFdQaoWg+YZQod0UlK6C98nELTetFy4pztwVMxHq1kcxCY8xKywA0nnXeudGgV0wjTZNKiVQ2RefTro9yFcTbhqgJ+pooB7MlpJv4f0tfGz74X64FTn5ovsjhWIpt3QKqgiKt/13LG9Yw5i2UHN26r5jYhof7zlghFMWukZmY48IGVzIle5NJzLQu8UfRbfoyt5krm03LGD+K+WRSyAzo5es7YX9Pryxlkt3BGOig85+5M/B+o0KNkGWGwBnnsYkpos3bj3ZmPuNqH0yZtF2FlOvSia9/qydaNEPcMcX+YvDpY0B3qtIzyEHA2bAE="
+
 git:
   depth: 10
 
@@ -30,3 +36,8 @@ after_success:
 # Build Docker image
     - docker build -t twang2218/blog.lab99.org .
     - docker images
+    - docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
+    - export TAG=$(date +%Y-%m-%d)
+    - docker tag twang2218/blog.lab99.org "twang2218/blog.lab99.org:$TAG"
+    - docker push twang2218/blog.lab99.org
+    - docker push "twang2218/blog.lab99.org:$TAG"
