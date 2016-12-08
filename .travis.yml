@@ -5,5 +5,9 @@ node_js:
 git:
   depth: 10
 
-script: yarn generate
-after_success: yarn deploy
+after_install:
+    - "npm rebuild"
+script:
+    - "yarn generate"
+deploy:
+    - "yarn deploy"
