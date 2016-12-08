@@ -110,3 +110,5 @@ deploy:
     # repo: git@git.coding.net:twang2218/twang2218.git
     repo: git@github.com:twang2218/blog.lab99.org.git
     branch: coding-pages
+    name: Tao Wang
+    email: twang2218@gmail.com

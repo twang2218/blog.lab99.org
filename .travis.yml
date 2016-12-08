@@ -15,7 +15,5 @@ after_success:
     - chmod 600 ../coding-deploy-key
     - ssh-add ../coding-deploy-key
     - ls -al
-    - git config --global user.email "twang2218@gmail.com"
-    - git config --global user.name "Tao Wang"
     - yarn deploy
     - rm ../coding-deploy-key
