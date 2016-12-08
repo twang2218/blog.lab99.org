@@ -15,8 +15,11 @@ before_deploy:
     - eval "$(ssh-agent -s)"
     - chmod 600 ../coding-deploy-key
     - ssh-add ../coding-deploy-key
+    - ls -al
 deploy:
     provider: script
-    script: yarn deploy
+    script:
+        - ls -al
+        - yarn deploy
 after_deploy:
     - rm ../coding-deploy-key
