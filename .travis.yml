@@ -5,7 +5,7 @@ node_js:
 git:
   depth: 10
 
-after_install:
+before_script:
     - "npm rebuild"
 script:
     - "yarn generate"
