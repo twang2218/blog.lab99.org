@@ -1,0 +1,164 @@
+<!DOCTYPE html><html lang="zh-cn"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 视频笔记：用 Fluentd 和 Datadog 监视 Docker 的最佳实践 - John Hammink · 大桥下的蜗牛</title><meta name="description" content="无善无恶心之体，有善有恶意之动，知善知恶是良知，为善去恶是格物。"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.png"><link rel="stylesheet" href="/css/jekyll.css"><!--[if lt IE 9]>
+<script src="js/html5shiv.min.js"></script>
+<script src="js/respond.min.js"></script>
+<![endif]--></head><body><header class="row-flex-row limit-width vh-center"><a href="/" class="logo"><img src="/favicon.png"></a><nav><ul class="nav-list"><li class="nav-list-item"><a href="/" class="nav-link">主页</a></li><li class="nav-list-item"><a href="/archives/" class="nav-link active">   博客</a></li><li class="nav-list-item"><a href="https://github.com/twang2218" target="_blank" class="nav-link">github</a></li><li class="nav-list-item"><a href="https://coding.net/u/twang2218" target="_blank" class="nav-link">coding</a></li><li class="nav-list-item"><a href="/atom.xml" class="nav-link">rss</a></li></ul></nav></header><div class="container limit-width"><section class="row-flex-row"><div class="post"><article class="post-block"><h2 class="post-title"><a href="/post/docker-2016-07-08-video-best-practices-for-docker-monitoring-with-fluentd-and-datadog.html" class="post-title-link">视频笔记：用 Fluentd 和 Datadog 监视 Docker 的最佳实践 - John Hammink</a></h2><div class="post-meta"><ul class="post-tag-list"><li class="post-tag-item"><a href="/tags/docker/" class="post-tag-link">docker</a></li><li class="post-tag-item"><a href="/tags/notes/" class="post-tag-link">notes</a></li><li class="post-tag-item"><a href="/tags/fluentd/" class="post-tag-link">fluentd</a></li><li class="post-tag-item"><a href="/tags/vimeo/" class="post-tag-link">vimeo</a></li></ul><div class="post-time">2016年7月8日 星期五</div></div><div class="post-content"><link rel="stylesheet" href="/style/owl.css"><!-- toc -->
+<ul>
+<li><a href="#shi-pin-xin-xi">&#x89C6;&#x9891;&#x4FE1;&#x606F;</a></li>
+<li><a href="#fluentd-unified-logging-layer">Fluentd: Unified Logging Layer</a></li>
+<li><a href="#zi-wo-jie-shao">&#x81EA;&#x6211;&#x4ECB;&#x7ECD;</a></li>
+<li><a href="#shi-me-shi-fluentd">&#x4EC0;&#x4E48;&#x662F; Fluentd&#xFF1F;</a></li>
+<li><a href="#extensible">Extensible</a><ul>
+<li><a href="#core">Core</a></li>
+<li><a href="#plugins">Plugins</a></li>
+</ul>
+</li>
+<li><a href="#nei-bu-jia-gou">&#x5185;&#x90E8;&#x67B6;&#x6784;</a></li>
+<li><a href="#use-cases">Use Cases</a><ul>
+<li><a href="#jian-dan-de-zhuan-fa">&#x7B80;&#x5355;&#x7684;&#x8F6C;&#x53D1;</a></li>
+<li><a href="#lue-fu-za-yi-xie-de-li-zi">&#x7565;&#x590D;&#x6742;&#x4E00;&#x4E9B;&#x7684;&#x4F8B;&#x5B50;</a></li>
+<li><a href="#lambda-jia-gou">Lambda &#x67B6;&#x6784;</a></li>
+<li><a href="#fluentd-docker-de-li-zi">Fluentd + Docker &#x7684;&#x4F8B;&#x5B50;</a></li>
+</ul>
+</li>
+<li><a href="#docker-toolbox">Docker Toolbox</a><ul>
+<li><a href="#docker-toolbox-nei-rong">Docker Toolbox &#x5185;&#x5BB9;</a></li>
+</ul>
+</li>
+<li><a href="#future-of-boot2docker">Future of Boot2Docker</a></li>
+<li><a href="#monitoring-docker-at-scale-datadog">Monitoring Docker at Scale (Datadog)</a><ul>
+<li><a href="#steps-to-working-with-docker">Steps to working with Docker</a></li>
+<li><a href="#docker-machine">docker-machine</a></li>
+</ul>
+</li>
+<li><a href="#monitoring-at-scale">Monitoring at Scale</a><ul>
+<li><a href="#operational-complexity">Operational Complexity</a></li>
+<li><a href="#xu-yao-qu-ce-liang-de-dong-xi">&#x9700;&#x8981;&#x53BB;&#x6D4B;&#x91CF;&#x7684;&#x4E1C;&#x897F;</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+<h1 id="shi-pin-xin-xi"><a href="#&#x89C6;&#x9891;&#x4FE1;&#x606F;" class="headerlink" title="&#x89C6;&#x9891;&#x4FE1;&#x606F;"></a>&#x89C6;&#x9891;&#x4FE1;&#x606F; <a href="#shi-pin-xin-xi" class="header-anchor">#</a></h1><p>Best Practices for Docker monitoring with Fluentd and Datadog<br>by John Hammink<br>(2015/08/11)</p>
+<div class="owl-media owl-video owl-vimeo"><iframe src="//player.vimeo.com/video/137998663" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen></iframe></div>
+<p><a href="https://vimeo.com/137998663" target="_blank" rel="external">https://vimeo.com/137998663</a></p>
+<div class="owl-media owl-video owl-tencent"><embed src="http://static.video.qq.com/TPout.swf?vid=d0314vikb0b&amp;auto=0" type="application/x-shockwave-flash" quality="high" allowfullscreen="true" align="middle" allowscriptaccess="always"></div>
+<p><a href="http://v.qq.com/x/page/d0314vikb0b.html" target="_blank" rel="external">http://v.qq.com/x/page/d0314vikb0b.html</a></p>
+<h1 id="fluentd-unified-logging-layer"><a href="#Fluentd-Unified-Logging-Layer" class="headerlink" title="Fluentd: Unified Logging Layer"></a>Fluentd: Unified Logging Layer <a href="#fluentd-unified-logging-layer" class="header-anchor">#</a></h1><h1 id="zi-wo-jie-shao"><a href="#&#x81EA;&#x6211;&#x4ECB;&#x7ECD;" class="headerlink" title="&#x81EA;&#x6211;&#x4ECB;&#x7ECD;"></a>&#x81EA;&#x6211;&#x4ECB;&#x7ECD; <a href="#zi-wo-jie-shao" class="header-anchor">#</a></h1><p>&#x6062;&#x590D;&#x8F6F;&#x4EF6;&#x548C;QA&#x5DE5;&#x7A0B;&#x5E08;&#xFF0C;&#x540E;&#x6765;&#x7531;&#x4E8E;&#x5BF9;&#x5206;&#x5F62;&#x7684;&#x75F4;&#x8FF7;&#x6210;&#x4E86;Digital Artist&#x3002;&#x800C;&#x73B0;&#x5728;&#x5219;&#x662F;&#x559C;&#x6B22;&#x4F7F;&#x7528;GPU&#x5BF9;&#x5927;&#x89C4;&#x6A21;&#x6570;&#x636E;&#x76F4;&#x63A5;&#x8FDB;&#x884C;&#x6570;&#x636E;&#x89C6;&#x89C9;&#x5316;&#x6E32;&#x67D3;&#x3002;</p>
+<p>github: <code>jammink2</code></p>
+<h1 id="shi-me-shi-fluentd"><a href="#&#x4EC0;&#x4E48;&#x662F;-Fluentd&#xFF1F;" class="headerlink" title="&#x4EC0;&#x4E48;&#x662F; Fluentd&#xFF1F;"></a>&#x4EC0;&#x4E48;&#x662F; Fluentd&#xFF1F; <a href="#shi-me-shi-fluentd" class="header-anchor">#</a></h1><p>&#x4E00;&#x4E2A; <strong>&#x53EF;&#x6269;&#x5C55;&#x7684;</strong> &#xFF0C; <strong>&#x53EF;&#x9760;&#x7684;</strong> &#xFF0C; <strong>&#x6570;&#x636E;&#x6536;&#x96C6;</strong> &#x5DE5;&#x5177;</p>
+<ul>
+<li>&#x53EF;&#x6269;&#x5C55;&#xFF1A;&#x4E00;&#x4E2A;&#x5F88;&#x7B80;&#x5355;&#x7684;&#x6838;&#x5FC3; + &#x5F88;&#x5F3A;&#x5927;&#x7684;&#x63D2;&#x4EF6;</li>
+<li>&#x53EF;&#x9760;&#x7684;&#xFF1A;Buffering, HA (failover), load balancing</li>
+<li>&#x6570;&#x636E;&#x6536;&#x96C6;&#x5DE5;&#x5177;&#xFF1A;&#x50CF; <code>syslogd</code></li>
+</ul>
+<p>&#x7EDF;&#x4E00;&#x7684;&#x65E5;&#x5FD7;&#x6570;&#x636E;&#x6536;&#x96C6;&#x5DE5;&#x5177;&#xFF0C;&#x57FA;&#x4E8E; <code>Ruby</code> &#x5199;&#x7684;&#xFF0C;&#x6709;&#x4E00;&#x90E8;&#x5206;<code>C</code>&#x7684;&#x4EE3;&#x7801;&#x3002;&#x6570;&#x636E;&#x6D41;&#x4F7F;&#x7528;&#x7EDF;&#x4E00;&#x7684;<code>JSON</code>&#x683C;&#x5F0F;&#x3002;</p>
+<h1 id="extensible"><a href="#Extensible" class="headerlink" title="Extensible"></a>Extensible <a href="#extensible" class="header-anchor">#</a></h1><h2 id="core"><a href="#Core" class="headerlink" title="Core"></a>Core <a href="#core" class="header-anchor">#</a></h2><ul>
+<li>Divide and Conqure</li>
+<li>&#x7F13;&#x5B58;&#x3001;&#x91CD;&#x8BD5;</li>
+<li>&#x9519;&#x8BEF;&#x5904;&#x7406;</li>
+<li>&#x6D88;&#x606F;&#x8DEF;&#x7531;</li>
+<li>&#x5E76;&#x884C;</li>
+</ul>
+<h2 id="plugins"><a href="#Plugins" class="headerlink" title="Plugins"></a>Plugins <a href="#plugins" class="header-anchor">#</a></h2><ul>
+<li>&#x8BFB;</li>
+<li>&#x89E3;&#x6790;</li>
+<li>Buffer</li>
+<li>&#x5199;&#x6570;&#x636E;</li>
+<li>&#x683C;&#x5F0F;&#x5316;&#x6570;&#x636E;</li>
+</ul>
+<h1 id="nei-bu-jia-gou"><a href="#&#x5185;&#x90E8;&#x67B6;&#x6784;" class="headerlink" title="&#x5185;&#x90E8;&#x67B6;&#x6784;"></a>&#x5185;&#x90E8;&#x67B6;&#x6784; <a href="#nei-bu-jia-gou" class="header-anchor">#</a></h1><ol>
+<li>Input</li>
+<li>Parser</li>
+<li>Filter</li>
+<li>Buffer</li>
+<li>Format</li>
+<li>Output</li>
+</ol>
+<p>&#x7B80;&#x5316;&#x7ED3;&#x6784;&#xFF1A; &#x8F93;&#x5165; &#x2192; Buffer &#x2192; &#x8F93;&#x51FA;</p>
+<p>Fluentd &#x5C06; M x N &#x7684;&#x590D;&#x6742;&#x5EA6;&#xFF0C;&#x964D;&#x4E3A; M + N&#x3002;</p>
+<h1 id="use-cases"><a href="#Use-Cases" class="headerlink" title="Use Cases"></a>Use Cases <a href="#use-cases" class="header-anchor">#</a></h1><h2 id="jian-dan-de-zhuan-fa"><a href="#&#x7B80;&#x5355;&#x7684;&#x8F6C;&#x53D1;" class="headerlink" title="&#x7B80;&#x5355;&#x7684;&#x8F6C;&#x53D1;"></a>&#x7B80;&#x5355;&#x7684;&#x8F6C;&#x53D1; <a href="#jian-dan-de-zhuan-fa" class="header-anchor">#</a></h2><p>{<code>Web</code>, <code>Mobile</code>} &#x2192; <code>Fluentd</code> &#x2192; <code>MongoDB</code></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"># log from a file</div><div class="line"><span class="tag">&lt;<span class="name">source</span>&gt;</span></div><div class="line">    @type tail</div><div class="line">    path /var/log/httpd.log</div><div class="line">    format apache2</div><div class="line">    tag backend.apache</div><div class="line"><span class="tag">&lt;/<span class="name">source</span>&gt;</span></div><div class="line"></div><div class="line"># log from client libraries</div><div class="line"><span class="tag">&lt;<span class="name">source</span>&gt;</span></div><div class="line">    @type forward</div><div class="line">    port 24224</div><div class="line"><span class="tag">&lt;/<span class="name">source</span>&gt;</span></div><div class="line"></div><div class="line"># store logs to ES and HDFS</div><div class="line"><span class="tag">&lt;<span class="name">match</span> <span class="attr">backend.</span>*&gt;</span></div><div class="line">    @type mongo</div><div class="line">    database fluent</div><div class="line">    collection test</div><div class="line"><span class="tag">&lt;/<span class="name">match</span>&gt;</span></div></pre></td></tr></table></figure>
+<h2 id="lue-fu-za-yi-xie-de-li-zi"><a href="#&#x7565;&#x590D;&#x6742;&#x4E00;&#x4E9B;&#x7684;&#x4F8B;&#x5B50;" class="headerlink" title="&#x7565;&#x590D;&#x6742;&#x4E00;&#x4E9B;&#x7684;&#x4F8B;&#x5B50;"></a>&#x7565;&#x590D;&#x6742;&#x4E00;&#x4E9B;&#x7684;&#x4F8B;&#x5B50; <a href="#lue-fu-za-yi-xie-de-li-zi" class="header-anchor">#</a></h2><p>{<code>mobile</code>, <code>web</code>} &#x2192; <code>&#x7B2C;&#x4E00;&#x7EA7; fluentd</code> &#x2192; <code>&#x7B2C;&#x4E8C;&#x7EA7; fluentd</code> &#x2192; <code>ElasicSearch</code></p>
+<h2 id="lambda-jia-gou"><a href="#Lambda-&#x67B6;&#x6784;" class="headerlink" title="Lambda &#x67B6;&#x6784;"></a>Lambda &#x67B6;&#x6784; <a href="#lambda-jia-gou" class="header-anchor">#</a></h2><p>{<code>mobile</code>, <code>web</code>} &#x2192; <code>Fluentd</code> &#x2192; {<code>ElasticSearch</code>, <code>Hadoop</code>}</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"># logs from a file</div><div class="line"><span class="tag">&lt;<span class="name">source</span>&gt;</span></div><div class="line">    @type tail</div><div class="line">    path /var/log/httpd.log</div><div class="line">    format apache2</div><div class="line">    tag web.access</div><div class="line"><span class="tag">&lt;/<span class="name">source</span>&gt;</span></div><div class="line"></div><div class="line"># logs from client library</div><div class="line"><span class="tag">&lt;<span class="name">source</span>&gt;</span></div><div class="line">    @type forward</div><div class="line">    port 24224</div><div class="line"><span class="tag">&lt;/<span class="name">source</span>&gt;</span></div><div class="line"></div><div class="line"># store logs to ES and HDFS</div><div class="line"><span class="tag">&lt;<span class="name">match</span> *<span class="attr">.</span>*&gt;</span></div><div class="line">    @type copy</div><div class="line">    <span class="tag">&lt;<span class="name">store</span>&gt;</span></div><div class="line">        @type elasticsearch</div><div class="line">        logstash_format true</div><div class="line">    <span class="tag">&lt;/<span class="name">store</span>&gt;</span></div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">store</span>&gt;</span></div><div class="line">        @type webhdfs</div><div class="line">        host namenode</div><div class="line">        port 50070</div><div class="line">        path /path/on/hdfs</div><div class="line">    <span class="tag">&lt;/<span class="name">store</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">match</span>&gt;</span></div></pre></td></tr></table></figure>
+<h2 id="fluentd-docker-de-li-zi"><a href="#Fluentd-Docker-&#x7684;&#x4F8B;&#x5B50;" class="headerlink" title="Fluentd + Docker &#x7684;&#x4F8B;&#x5B50;"></a>Fluentd + Docker &#x7684;&#x4F8B;&#x5B50; <a href="#fluentd-docker-de-li-zi" class="header-anchor">#</a></h2><p>&#x73AF;&#x5883;&#x662F;<code>3</code>&#x4E2A;Docker&#x5BB9;&#x5668;{<code>Rails</code>, <code>PostgreSQL</code>, <code>RabbitMQ</code>}&#x5728;&#x8FD0;&#x884C;&#xFF0C;&#x65E5;&#x5FD7;&#x901A;&#x8FC7;<code>Fluentd</code>&#x65E5;&#x5FD7;&#x9A71;&#x52A8;&#x8F93;&#x51FA;&#x7ED9; <code>Fluentd</code> &#xFF0C;<code>Fluentd</code> &#x8FDB;&#x800C;&#x53D1;&#x9001;&#x7ED9; <code>S3</code>, <code>MongoDB</code>, <code>ElasticSearch</code>, <code>Treasure Data</code>&#x7B49;&#x7B49;&#x3002;</p>
+<p>&#x4E0B;&#x9762;&#x662F;&#x63A5;&#x6536;&#x65E5;&#x5FD7;&#x7684; <code>fluentd</code> &#x7684;&#x914D;&#x7F6E;</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">source</span>&gt;</span></div><div class="line">    @forward</div><div class="line"><span class="tag">&lt;/<span class="name">source</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">match</span> <span class="attr">td.</span>*<span class="attr">.</span>*&gt;</span></div><div class="line">    @type tdlog</div><div class="line">    apikey xxxxx</div><div class="line">    auto_create_table</div><div class="line">    buffer_type file</div><div class="line">    buffer_path /var/log/td-agent/buffer/td</div><div class="line">    flush_interval 5s</div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">secondary</span>&gt;</span></div><div class="line">        @type file</div><div class="line">        path /var/log/td-agent/failed_records</div><div class="line">    <span class="tag">&lt;/<span class="name">secondary</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">match</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">match</span> <span class="attr">td.</span>*<span class="attr">.</span>*&gt;</span></div><div class="line">    @type stdout</div><div class="line"><span class="tag">&lt;/<span class="name">match</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">docker run -it \</div><div class="line">    --name <span class="built_in">test</span> \</div><div class="line">    --log-driver=fluentd \</div><div class="line">    --log-opt fluentd-tag=td.docker.{{.Name}} \</div><div class="line">    ubuntu /bin/bash</div></pre></td></tr></table></figure>
+<p>&#x7136;&#x540E;&#x53BB;<code>Treasure Data</code>&#x53EF;&#x4EE5;&#x770B;&#x5230;&#x6570;&#x636E;</p>
+<h1 id="docker-toolbox"><a href="#Docker-Toolbox" class="headerlink" title="Docker Toolbox"></a>Docker Toolbox <a href="#docker-toolbox" class="header-anchor">#</a></h1><p>by Michael Chiang</p>
+<h2 id="docker-toolbox-nei-rong"><a href="#Docker-Toolbox-&#x5185;&#x5BB9;" class="headerlink" title="Docker Toolbox &#x5185;&#x5BB9;"></a>Docker Toolbox &#x5185;&#x5BB9; <a href="#docker-toolbox-nei-rong" class="header-anchor">#</a></h2><ul>
+<li>Docker client</li>
+<li>Machine</li>
+<li>Compose</li>
+<li>Kitematic</li>
+<li>Virtualbox</li>
+</ul>
+<h1 id="future-of-boot2docker"><a href="#Future-of-Boot2Docker" class="headerlink" title="Future of Boot2Docker"></a>Future of Boot2Docker <a href="#future-of-boot2docker" class="header-anchor">#</a></h1><p><code>Boot2Docker CLI</code> &#x5E9F;&#x5F03;&#x4E86;&#xFF0C;&#x88AB; <code>Docker Machine</code> &#x66FF;&#x4EE3;&#x4E86;<br>&#x4E0B;&#x4E00;&#x4EE3;&#x7684;&#x7248;&#x672C;&#x5C06;&#x4F1A;&#x4EE3;&#x66FF;&#x5F53;&#x524D;&#x7684; <code>TinyCore Linux</code> &#x7248;&#x672C;</p>
+<h1 id="monitoring-docker-at-scale-datadog"><a href="#Monitoring-Docker-at-Scale-Datadog" class="headerlink" title="Monitoring Docker at Scale (Datadog)"></a>Monitoring Docker at Scale (Datadog) <a href="#monitoring-docker-at-scale-datadog" class="header-anchor">#</a></h1><p>by Matt Williams</p>
+<h2 id="steps-to-working-with-docker"><a href="#Steps-to-working-with-Docker" class="headerlink" title="Steps to working with Docker"></a>Steps to working with Docker <a href="#steps-to-working-with-docker" class="header-anchor">#</a></h2><ul>
+<li>&#x521B;&#x5EFA;&#x4E00;&#x4E2A; Docker Host (<code>docker-machine</code>)</li>
+<li>&#x4ECE;&#x4E00;&#x4E2A;&#x955C;&#x50CF;&#x521B;&#x5EFA; Docker &#x5BB9;&#x5668;</li>
+<li>&#x591A;&#x4E2A;&#x5BB9;&#x5668;&#x534F;&#x4F5C; <code>Docker Compose</code></li>
+</ul>
+<h2 id="docker-machine"><a href="#docker-machine" class="headerlink" title="docker-machine"></a>docker-machine <a href="#docker-machine" class="header-anchor">#</a></h2><p>&#x53EF;&#x4EE5;&#x5E2E;&#x52A9;&#x521B;&#x5EFA; <code>Docker Host</code>&#xFF0C;{<code>Mac</code>, <code>Windows</code>}:(boot2docker), <code>Google</code>, <code>AWS</code>, <code>Digital Ocean</code> &#x2026;</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">docker-machine create <span class="_">-d</span> vmwarefusion fusiondkr</div><div class="line"></div><div class="line"><span class="built_in">eval</span> $(docker-machine env fusiondkr)</div></pre></td></tr></table></figure>
+<p>&#x7528;<code>vmware</code>, <code>virtualbox</code>&#x975E;&#x5E38;&#x5BB9;&#x6613;&#xFF0C;&#x7528;&#x5176;&#x4ED6;&#x7684;&#x4E91;&#x670D;&#x52A1;&#x5219;&#x9700;&#x8981;&#x5F88;&#x591A;&#x914D;&#x7F6E;&#x3002;</p>
+<p>&#x6BD4;&#x5982;Openstack</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">docker-machine create <span class="_">-d</span> openstack \</div><div class="line">    --openstack-flavor-name standard.large \</div><div class="line">    --openstack-image-id &#x201C;xxxxxxx&#x201D; \</div><div class="line">    --openstack-floatingip-pool &#x201C;Ext-Net&#x201D; \</div><div class="line">    --openstack-ssh-user ubuntu \</div><div class="line">    hpdocker</div><div class="line"></div><div class="line"><span class="built_in">eval</span> $(docker-machine env hpdocker)</div></pre></td></tr></table></figure>
+<p>&#x518D;&#x6BD4;&#x5982; AWS&#xFF1A;</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">docker-machine create <span class="_">-d</span> amazonec2 \</div><div class="line">    --amazonec2-access-key <span class="variable">$AWS_ACCESS_KEY_ID</span> \</div><div class="line">    --amazonec2-secret-key <span class="variable">$AWS_SECRET_ACCESS_KEY</span> \</div><div class="line">    --amazonec2-ami <span class="variable">$ami</span> \</div><div class="line">    --amazonec2-instance-type <span class="variable">$instance_size</span> \</div><div class="line">    --amazonec2-vpc-id <span class="variable">$vpc_id</span> \</div><div class="line">    --amazonec2-security-group <span class="variable">$security_group</span> \</div><div class="line">    --amazonec2-region <span class="variable">$aws_region</span> \</div><div class="line">    &lt;machine name&gt;</div></pre></td></tr></table></figure>
+<blockquote>
+<p><code>docker build</code> &#x2192; <code>docker run</code></p>
+</blockquote>
+<p>&#x524D;&#x7AEF;&#x4E00;&#x4E2A; load balancer&#xFF0C;&#x7528;&#x7684;&#x662F;<code>nginx</code> + <code>consul-template</code><br>&#x540E;&#x7AEF;&#x662F;&#x5404;&#x79CD;&#x5E94;&#x7528;&#x3002;<code>Dockerfile</code>&#x592A;&#x591A;&#x65E0;&#x754F;&#x7684;&#x5C42;&#xFF0C;&#x800C;&#x4E14;&#x4F7F;&#x7528;&#x4E86; <code>Supervisord</code>&#xFF0C;&#x5176;&#x5B9E;&#x662F;&#x628A;&#x5BB9;&#x5668;&#x5F53;&#x505A;&#x865A;&#x62DF;&#x673A;&#x4E86;&#x3002;</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker-compose scale web=20</div></pre></td></tr></table></figure>
+<p>download demo:  <a href="http://dtdg.co/dkron" target="_blank" rel="external">http://dtdg.co/dkron</a></p>
+<p>&#x76D1;&#x6D4B; docker &#x72B6;&#x6001;</p>
+<p>&#x4E24;&#x79CD;&#x547D;&#x4EE4;&#x5F62;&#x5F0F;&#xFF0C;&#x4E00;&#x79CD;&#x662F;</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker stats</div></pre></td></tr></table></figure>
+<p>&#x8FD9;&#x6837;&#x4F1A;&#x53EA;&#x663E;&#x793A;&#x5BB9;&#x5668;ID&#xFF0C;&#x4E00;&#x4E32;&#x6570;&#xFF0C;&#x4F30;&#x8BA1;&#x4E00;&#x822C;&#x90FD;&#x4E0D;&#x77E5;&#x9053;&#x662F;&#x5565;</p>
+<p>&#x53E6;&#x4E00;&#x79CD;&#x662F;&#x5C3E;&#x5760;&#x5BB9;&#x5668;&#x540D;</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">docker stats \</div><div class="line">    nginxredisdocker_datadog_1 \</div><div class="line">    nginxredisdocker_loadbalancer_1 \</div><div class="line">    nginxredisdocker_registrator_1 \</div><div class="line">    nginxredisdocker_consol_1 \</div><div class="line">    nginxredisdocker_web_1</div></pre></td></tr></table></figure>
+<p>&#x53E6;&#x4E00;&#x79CD;&#x65B9;&#x5F0F;&#x67E5;&#x770B;&#x72B6;&#x6001;&#x7684;&#x5F62;&#x5F0F;&#xFF0C;&#x901A;&#x8FC7; <code>REST API</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">http --stream <span class="_">-f</span> --verify=no \</div><div class="line">    --cert=<span class="variable">$DOCKER_CERT_PATH</span>/cert.pem \</div><div class="line">    --cert-key=<span class="variable">$DOCKER_CERT_PATH</span>/key.pem \</div><div class="line">    https://172.16.88.129:2376/containers/xxxxxxx/stats</div><div class="line"></div><div class="line">docker-machine ls</div><div class="line">docker-machine ip</div><div class="line"></div><div class="line">docker ps</div></pre></td></tr></table></figure>
+<h1 id="monitoring-at-scale"><a href="#Monitoring-at-Scale" class="headerlink" title="Monitoring at Scale"></a>Monitoring at Scale <a href="#monitoring-at-scale" class="header-anchor">#</a></h1><h2 id="operational-complexity"><a href="#Operational-Complexity" class="headerlink" title="Operational Complexity"></a>Operational Complexity <a href="#operational-complexity" class="header-anchor">#</a></h2><ul>
+<li>&#x5E73;&#x5747;&#x6BCF;&#x4E2A;&#x4E3B;&#x673A;&#x7684;&#x5BB9;&#x5668;&#x6570;&#x91CF;&#xFF1A;N ( <code>2014&#x5E74;10&#x6708;</code>&#x65F6;&#xFF0C;N&#x662F;<code>5</code>&#xFF0C;&#x4ECA;&#x5E74;<code>2016</code>&#xFF0C;&#x7EDF;&#x8BA1;&#x540C;&#x6837;&#x662F;<code>5</code>&#xFF09;</li>
+<li>N * &#x4E3B;&#x673A;&#x6570;&#x91CF; = &#x591A;&#x5C11;&#x4E2A;&#x201C;&#x4E3B;&#x673A;&#x201D;&#x6765;&#x7BA1;&#x7406;</li>
+<li>provision, configuration, orchestration, monitoring.</li>
+</ul>
+<h2 id="xu-yao-qu-ce-liang-de-dong-xi"><a href="#&#x9700;&#x8981;&#x53BB;&#x6D4B;&#x91CF;&#x7684;&#x4E1C;&#x897F;" class="headerlink" title="&#x9700;&#x8981;&#x53BB;&#x6D4B;&#x91CF;&#x7684;&#x4E1C;&#x897F;"></a>&#x9700;&#x8981;&#x53BB;&#x6D4B;&#x91CF;&#x7684;&#x4E1C;&#x897F; <a href="#xu-yao-qu-ce-liang-de-dong-xi" class="header-anchor">#</a></h2><ul>
+<li><p>&#x4E00;&#x4E2A;&#x865A;&#x62DF;&#x4E3B;&#x673A;</p>
+<ul>
+<li><code>10</code>&#x4E2A;&#x5DE6;&#x53F3;&#x7684;&#x4E1C;&#x897F;</li>
+</ul>
+</li>
+<li><p>&#x4E00;&#x4E2A;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;</p>
+<ul>
+<li>&#x5927;&#x7EA6;<code>100</code>&#x4E2A;&#x6D4B;&#x91CF;&#x70B9;</li>
+</ul>
+</li>
+<li><p><code>N</code>&#x4E2A;&#x5BB9;&#x5668;</p>
+<ul>
+<li><code>100</code> * <code>N</code> &#x4E2A;&#x6D4B;&#x91CF;&#x70B9;</li>
+</ul>
+</li>
+<li><p><code>110</code> + <code>100</code> * <code>N</code> &#x4E2A;&#x6D4B;&#x91CF;&#x70B9;/&#x865A;&#x62DF;&#x673A;</p>
+</li>
+</ul>
+<p>&#x5982;&#x679C;&#x6211;&#x4EEC;&#x4EE5;&#x524D;&#x6BCF;&#x4E2A;&#x4E3B;&#x673A;&#x9700;&#x8981;<code>160</code>&#x4E2A;&#x6D4B;&#x91CF;&#x70B9;&#xFF0C;&#x73B0;&#x5728;&#x5C31;&#x5F97;&#x9700;&#x8981;<code>610</code>&#x4E2A;&#x6D4B;&#x91CF;&#x70B9;</p>
+<p>&#x5982;&#x679C;&#x6211;&#x4EEC;&#x6709;<code>100</code>&#x4E2A;&#x4E3B;&#x673A;&#xFF0C;&#x5C31;&#x5F97;&#x9700;&#x8981;<code>61K</code>&#x4E2A;&#x6D4B;&#x91CF;&#x70B9;&#x3002;</p>
+<p>&#x548C;&#x865A;&#x62DF;&#x673A;&#x4E0D;&#x540C;&#xFF0C;&#x5BB9;&#x5668;&#x7684;&#x751F;&#x5B58;&#x5468;&#x671F;&#x66F4;&#x77ED;</p>
+<p>&#x865A;&#x62DF;&#x673A;&#x7684;&#x751F;&#x5B58;&#x5468;&#x671F;&#x53EF;&#x80FD;&#x662F;&#x5C0F;&#x65F6;&#x3001;&#x5929;&#x3001;&#x6708;&#x4E3A;&#x5355;&#x4F4D;&#xFF0C;&#x800C;&#x5BB9;&#x5668;&#x5219;&#x662F;&#x5206;&#x949F;&#x3001;&#x5C0F;&#x65F6;&#xFF0C;&#x5929;&#x4E3A;&#x5355;&#x4F4D;&#x3002;</p>
+<p>&#x7528; <code>Tag</code> &#x53BB;&#x76D1;&#x6D4B;&#xFF0C;&#x800C;&#x4E0D;&#x662F;&#x7528;&#x4E3B;&#x673A;IP&#x4E4B;&#x7C7B;&#x7684;&#x3002;&#x8FD9;&#x6837;&#x53EF;&#x4EE5;&#x5FFD;&#x7565;&#x4E0D;&#x540C;&#x5BB9;&#x5668;&#x7684;&#x751F;&#x6B7B;&#x53D8;&#x5316;&#x3002;</p>
+</div></article><div class="pagination"><a href="/post/docker-2016-07-11-video-containerd-building-a-container-supervisor.html" class="pagination-prev">PREV</a><a href="/post/docker-2016-07-07-video-thinking-inside-the-container.html" class="pagination-next">NEXT</a></div><div class="comments"><div data-thread-key="post/docker-2016-07-08-video-best-practices-for-docker-monitoring-with-fluentd-and-datadog.html" data-title="视频笔记：用 Fluentd 和 Datadog 监视 Docker 的最佳实践 - John Hammink" data-url="http://blog.lab99.org/post/docker-2016-07-08-video-best-practices-for-docker-monitoring-with-fluentd-and-datadog.html" class="ds-thread"></div></div></div><aside class="sidebar"><h3>分类标签</h3><ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Sonatype/">Sonatype</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/coreos/">coreos</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker-summit/">docker summit</a></li></ul><h3>最新文章</h3><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/post/docker-2016-12-07-video-persistent-storage-tailored-for-containers.html">视频笔记：为容器定制的持久化存储方案 - Infinit - Quentin Hocquet</a></li><li class="post-list-item"><a class="post-list-link" href="/post/docker-2016-11-14-what-is-new-in-docker-1-13.html">Docker 1.13 新增功能</a></li><li class="post-list-item"><a class="post-list-link" href="/post/docker-2016-08-12-video-windows-server-and-docker.html">视频笔记： Windows Server 和 Docker - John Starks</a></li><li class="post-list-item"><a class="post-list-link" href="/post/docker-2016-08-08-video-docker-ops-docker-networking-deep-dive-considerations-and-troubleshooting.html">视频笔记：Docker 运维 - Docker Networking 进阶指南 - Madhu Venugopal</a></li><li class="post-list-item"><a class="post-list-link" href="/post/docker-2016-07-26-video-docker-for-ops-docker-storage-and-volumes-deep-dive-and-considerations.html">视频笔记：Docker 运维 - Docker Storage 和 Volumes 进阶指南 - Brian Goff</a></li><li class="post-list-item"><a class="post-list-link" href="/post/docker-2016-07-21-video-green-font-black-background-docker-security-by-example.html">视频笔记：绿字黑屏 - Docker 安全示例 - Diogo Mónica</a></li><li class="post-list-item"><a class="post-list-link" href="/post/docker-2016-07-14-faq.html">Docker 问答录</a></li><li class="post-list-item"><a class="post-list-link" href="/post/docker-2016-07-12-video-moby-cool-hack-session-dockercon.html">视频笔记：Moby 的 Cool Hack session</a></li></ul></aside></section></div><div class="extra"></div><footer class="footer"><div class="row-flex-row limit-width vh-center"><div class="copyright"><P>© 2016 <a href="/">王涛</P></div><div class="power"><p><a href="http://pinggod.com/">Sean Sun</a>, 
+<a href="https://hexo.io">Hexo</a>, 
+<a href="https://github.com/">GitHub</a>, 
+<a href="https://jekyllrb.com/">Jekyll</a></p></div></div></footer><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-80785538-1",'auto');ga('send','pageview');</script><script>var _hmt = _hmt || [];(function() {var hm = document.createElement("script");hm.src = "//hm.baidu.com/hm.js?ee75cf08ad330aa99f8540efa2570970";var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s);})();</script><script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script>var duoshuoQuery = {short_name:"twang2218-coding"};
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();
+</script></body></html>

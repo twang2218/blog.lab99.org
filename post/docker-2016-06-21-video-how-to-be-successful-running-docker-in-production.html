@@ -1,0 +1,113 @@
+<!DOCTYPE html><html lang="zh-cn"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 视频笔记：如何成功在生产环境中运行 Docker - John Fiedler · 大桥下的蜗牛</title><meta name="description" content="无善无恶心之体，有善有恶意之动，知善知恶是良知，为善去恶是格物。"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.png"><link rel="stylesheet" href="/css/jekyll.css"><!--[if lt IE 9]>
+<script src="js/html5shiv.min.js"></script>
+<script src="js/respond.min.js"></script>
+<![endif]--></head><body><header class="row-flex-row limit-width vh-center"><a href="/" class="logo"><img src="/favicon.png"></a><nav><ul class="nav-list"><li class="nav-list-item"><a href="/" class="nav-link">主页</a></li><li class="nav-list-item"><a href="/archives/" class="nav-link active">   博客</a></li><li class="nav-list-item"><a href="https://github.com/twang2218" target="_blank" class="nav-link">github</a></li><li class="nav-list-item"><a href="https://coding.net/u/twang2218" target="_blank" class="nav-link">coding</a></li><li class="nav-list-item"><a href="/atom.xml" class="nav-link">rss</a></li></ul></nav></header><div class="container limit-width"><section class="row-flex-row"><div class="post"><article class="post-block"><h2 class="post-title"><a href="/post/docker-2016-06-21-video-how-to-be-successful-running-docker-in-production.html" class="post-title-link">视频笔记：如何成功在生产环境中运行 Docker - John Fiedler</a></h2><div class="post-meta"><ul class="post-tag-list"><li class="post-tag-item"><a href="/tags/docker/" class="post-tag-link">docker</a></li><li class="post-tag-item"><a href="/tags/youtube/" class="post-tag-link">youtube</a></li><li class="post-tag-item"><a href="/tags/notes/" class="post-tag-link">notes</a></li><li class="post-tag-item"><a href="/tags/dockercon15-eu/" class="post-tag-link">dockercon15-eu</a></li></ul><div class="post-time">2016年6月21日 星期二</div></div><div class="post-content"><link rel="stylesheet" href="/style/owl.css"><!-- toc -->
+<ul>
+<li><a href="#shi-pin-xin-xi">&#x89C6;&#x9891;&#x4FE1;&#x606F;</a></li>
+<li><a href="#ding-yi-sheng-chan-huan-jing">&#x5B9A;&#x4E49;&#x751F;&#x4EA7;&#x73AF;&#x5883;</a></li>
+<li><a href="#ding-yi-cheng-gong">&#x5B9A;&#x4E49;&#x6210;&#x529F;</a></li>
+<li><a href="#fang-ru-rong-qi-de-dong-xi">&#x653E;&#x5165;&#x5BB9;&#x5668;&#x7684;&#x4E1C;&#x897F;&#xFF1A;</a></li>
+<li><a href="#docker-hua-de-chang-jing">docker&#x5316;&#x7684;&#x573A;&#x666F;</a><ul>
+<li><a href="#chuang-jian">&#x521B;&#x5EFA;</a></li>
+<li><a href="#bu-shu">&#x90E8;&#x7F72;</a></li>
+<li><a href="#yun-xing">&#x8FD0;&#x884C;</a></li>
+<li><a href="#yun-wei">&#x8FD0;&#x7EF4;</a></li>
+</ul>
+</li>
+<li><a href="#jing-yan">&#x7ECF;&#x9A8C;</a><ul>
+<li><a href="#di-yi-ge-wen-ti">&#x7B2C;&#x4E00;&#x4E2A;&#x95EE;&#x9898;</a></li>
+<li><a href="#nei-he-ban-ben-hen-chong-yao">&#x5185;&#x6838;&#x7248;&#x672C;&#x5F88;&#x91CD;&#x8981;</a></li>
+<li><a href="#zhao-ge-hao-de-registry">&#x627E;&#x4E2A;&#x597D;&#x7684;registry</a></li>
+<li><a href="#zai-aws-bu-shu">&#x5728;AWS&#x90E8;&#x7F72;</a></li>
+<li><a href="#mei-ge-zhu-ji-you-yue-shao-de-rong-qi-yue-hao">&#x6BCF;&#x4E2A;&#x4E3B;&#x673A;&#x6709;&#x8D8A;&#x5C11;&#x7684;&#x5BB9;&#x5668;&#x8D8A;&#x597D;</a></li>
+<li><a href="#ci-cd-with-docker">CI/CD with Docker</a></li>
+<li><a href="#beanstalk-architecture">Beanstalk architecture</a></li>
+<li><a href="#yi-nian-qian">&#x4E00;&#x5E74;&#x524D;</a></li>
+</ul>
+</li>
+<li><a href="#zong-jie">&#x603B;&#x7ED3;</a></li>
+</ul>
+<!-- tocstop -->
+<h1 id="shi-pin-xin-xi"><a href="#&#x89C6;&#x9891;&#x4FE1;&#x606F;" class="headerlink" title="&#x89C6;&#x9891;&#x4FE1;&#x606F;"></a>&#x89C6;&#x9891;&#x4FE1;&#x606F; <a href="#shi-pin-xin-xi" class="header-anchor">#</a></h1><p>How to be successful running Docker in Production<br>by John Fiedler<br>Senior Director of Engineering @ SalesforeceIQ</p>
+<div class="owl-media owl-video owl-youtube"><iframe src="//www.youtube.com/embed/j6Ge4wP1yH0" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen></iframe></div>
+<p><a href="https://www.youtube.com/watch?v=j6Ge4wP1yH0" target="_blank" rel="external">https://www.youtube.com/watch?v=j6Ge4wP1yH0</a></p>
+<div class="owl-media owl-video owl-tencent"><embed src="http://static.video.qq.com/TPout.swf?vid=f0314wy9h49&amp;auto=0" type="application/x-shockwave-flash" quality="high" allowfullscreen="true" align="middle" allowscriptaccess="always"></div>
+<p><a href="http://v.qq.com/x/page/f0314wy9h49.html" target="_blank" rel="external">http://v.qq.com/x/page/f0314wy9h49.html</a></p>
+<h1 id="ding-yi-sheng-chan-huan-jing"><a href="#&#x5B9A;&#x4E49;&#x751F;&#x4EA7;&#x73AF;&#x5883;" class="headerlink" title="&#x5B9A;&#x4E49;&#x751F;&#x4EA7;&#x73AF;&#x5883;"></a>&#x5B9A;&#x4E49;&#x751F;&#x4EA7;&#x73AF;&#x5883; <a href="#ding-yi-sheng-chan-huan-jing" class="header-anchor">#</a></h1><ul>
+<li>Production != test dev</li>
+<li>&#x8981;&#x8003;&#x8651;&#x9694;&#x79BB;&#x3001;&#x5B89;&#x5168;&#x3001;&#x6027;&#x80FD;&#x3001;&#x76D1;&#x63A7;&#x3001;&#x65E5;&#x5FD7;&#x7B49;&#x7B49;</li>
+<li>&#x8981;&#x6269;&#x5C55;&#x3001;&#x6A21;&#x677F;&#x3001;&#x81EA;&#x52A8;&#x5316;</li>
+</ul>
+<h1 id="ding-yi-cheng-gong"><a href="#&#x5B9A;&#x4E49;&#x6210;&#x529F;" class="headerlink" title="&#x5B9A;&#x4E49;&#x6210;&#x529F;"></a>&#x5B9A;&#x4E49;&#x6210;&#x529F; <a href="#ding-yi-cheng-gong" class="header-anchor">#</a></h1><ul>
+<li><blockquote>
+<p>99% uptime&#xFF1F;</p>
+</blockquote>
+</li>
+<li>&#x5FEB;&#x901F;&#x4EE3;&#x7801;&#x90E8;&#x7F72;</li>
+<li>0 &#x5B89;&#x5168;&#x4E8B;&#x4EF6;&#xFF1F;</li>
+</ul>
+<p>100% &#x7684;web infrastructure &#x4F7F;&#x7528;docker</p>
+<h1 id="fang-ru-rong-qi-de-dong-xi"><a href="#&#x653E;&#x5165;&#x5BB9;&#x5668;&#x7684;&#x4E1C;&#x897F;&#xFF1A;" class="headerlink" title="&#x653E;&#x5165;&#x5BB9;&#x5668;&#x7684;&#x4E1C;&#x897F;&#xFF1A;"></a>&#x653E;&#x5165;&#x5BB9;&#x5668;&#x7684;&#x4E1C;&#x897F;&#xFF1A; <a href="#fang-ru-rong-qi-de-dong-xi" class="header-anchor">#</a></h1><ul>
+<li><p>&#x8D8A;&#x591A;&#x4F9D;&#x8D56;&#x3001;&#x8D8A;&#x591A;&#x7684;&#x6539;&#x53D8;&#xFF0C;&#x5C31;&#x8D8A;&#x9002;&#x5408;</p>
+<ul>
+<li>&#x6BD4;&#x5982;Web&#x670D;&#x52A1;&#xFF0C;&#x5185;&#x5BB9;&#x7ED3;&#x6784;&#x4F1A;&#x7ECF;&#x5E38;&#x53D8;&#x5316;&#xFF0C;&#x800C;&#x4E14;&#x4F9D;&#x8D56;&#x975E;&#x5E38;&#x591A;&#xFF1B;</li>
+<li>&#x800C;&#x6570;&#x636E;&#x5E93;&#x5219;&#x4E00;&#x65E6;&#x90E8;&#x7F72;&#x51E0;&#x5E74;&#x4E0D;&#x53D8;&#x52A8;&#xFF0C;&#x800C;&#x4E14;&#x4F9D;&#x8D56;&#x5F88;&#x5C11;&#xFF1B;</li>
+</ul>
+</li>
+<li><p>&#x8D8A;&#x662F;&#x65E0;&#x72B6;&#x6001;(<code>stateless</code>)&#x3001;&#x8D8A;&#x77ED;&#x751F;&#x547D;&#x5468;&#x671F;&#x7684;</p>
+</li>
+</ul>
+<h1 id="docker-hua-de-chang-jing"><a href="#docker&#x5316;&#x7684;&#x573A;&#x666F;" class="headerlink" title="docker&#x5316;&#x7684;&#x573A;&#x666F;"></a>docker&#x5316;&#x7684;&#x573A;&#x666F; <a href="#docker-hua-de-chang-jing" class="header-anchor">#</a></h1><h2 id="chuang-jian"><a href="#&#x521B;&#x5EFA;" class="headerlink" title="&#x521B;&#x5EFA;"></a>&#x521B;&#x5EFA; <a href="#chuang-jian" class="header-anchor">#</a></h2><ul>
+<li>Dev/Ops&#x662F;&#x5B8C;&#x5168;Docker&#x5316;&#x7684;&#xFF1B;</li>
+</ul>
+<h2 id="bu-shu"><a href="#&#x90E8;&#x7F72;" class="headerlink" title="&#x90E8;&#x7F72;"></a>&#x90E8;&#x7F72; <a href="#bu-shu" class="header-anchor">#</a></h2><ul>
+<li>CI/CD&#x662F;&#x90E8;&#x5206;Docker&#x5316;&#x7684;&#xFF1B;</li>
+</ul>
+<h2 id="yun-xing"><a href="#&#x8FD0;&#x884C;" class="headerlink" title="&#x8FD0;&#x884C;"></a>&#x8FD0;&#x884C; <a href="#yun-xing" class="header-anchor">#</a></h2><ul>
+<li>Web&#x3001;&#x4E2D;&#x95F4;&#x4EF6;&#x3001;&#x4EFB;&#x52A1;&#x3001;&#x811A;&#x672C;&#x662F;&#x5B8C;&#x5168;Docker&#x5316;&#x7684;</li>
+<li>&#x6279;&#x5904;&#x7406;&#x548C;&#x6D41;&#x5904;&#x7406;&#x662F;&#x90E8;&#x5206;Docker&#x5316;&#x7684;&#xFF1B;</li>
+<li>&#x56FA;&#x5B9A;&#x5B58;&#x50A8;&#x5219;&#x4E0D;&#x662F;Docker&#x5316;&#x7684;&#x3002;</li>
+</ul>
+<h2 id="yun-wei"><a href="#&#x8FD0;&#x7EF4;" class="headerlink" title="&#x8FD0;&#x7EF4;"></a>&#x8FD0;&#x7EF4; <a href="#yun-wei" class="header-anchor">#</a></h2><ul>
+<li>&#x76D1;&#x63A7;&#x3001;&#x65E5;&#x5FD7;&#x3001;&#x5B89;&#x5168;&#x662F;&#x90E8;&#x5206;docker&#x5316;&#x7684;&#x3002;</li>
+</ul>
+<p>&#x66FE;&#x7ECF;&#x5C1D;&#x8BD5;&#x8FC7; Docker in Docker&#xFF0C;&#x4F46;&#x662F;&#x53D1;&#x73B0;&#x5F88;&#x60F3;&#x6269;&#x5C55;&#x80FD;&#x529B;&#x592A;&#x5DEE;&#x3002;</p>
+<p>&#x73B0;&#x5728;70%&#x7684;&#x4E1C;&#x897F;&#x90FD;&#x5728;docker&#x91CC;&#x3002;</p>
+<h1 id="jing-yan"><a href="#&#x7ECF;&#x9A8C;" class="headerlink" title="&#x7ECF;&#x9A8C;"></a>&#x7ECF;&#x9A8C; <a href="#jing-yan" class="header-anchor">#</a></h1><p>Docker &#x73B0;&#x5728;&#x751F;&#x4EA7;&#x73AF;&#x5883;&#x7A33;&#x5B9A;&#x3002;&#x4F46;&#x662F;&#x5468;&#x8FB9;&#x7684;&#x5DE5;&#x5177;&#x4E0D;&#x4E00;&#x5B9A;&#x751F;&#x4EA7;&#x73AF;&#x5883;&#x53EF;&#x7528;&#xFF0C;&#x8981;&#x8C28;&#x614E;&#x3002;</p>
+<p>&#x53EF;&#x4EE5;&#x914D;&#x5408;docker&#x4F7F;&#x7528;<code>chef</code>, <code>ansible</code>, <code>saltstack</code>&#x7B49;&#x5DE5;&#x5177;&#xFF0C;&#x8FD9;&#x4E9B;&#x4E1C;&#x897F;&#x4E00;&#x6837;&#x7528;&#xFF0C;&#x800C;&#x4E14;&#x914D;&#x5408;&#x7528;&#x8D77;&#x6765;&#x5F88;&#x597D;&#x3002;</p>
+<p>&#x73B0;&#x5728;&#x5728; AWS AMI &#x4E0A;&#x7528;<code>Chef</code>&#x6765;&#x8BBE;&#x7F6E;&#x751F;&#x4EA7;&#x73AF;&#x5883;&#x7684;web server&#xFF0C;&#x7528;<code>cron</code>&#x63A7;&#x5236;&#x811A;&#x672C;&#x6765;&#x7F16;&#x6392;&#x5BB9;&#x5668;&#x3002;</p>
+<h2 id="di-yi-ge-wen-ti"><a href="#&#x7B2C;&#x4E00;&#x4E2A;&#x95EE;&#x9898;" class="headerlink" title="&#x7B2C;&#x4E00;&#x4E2A;&#x95EE;&#x9898;"></a>&#x7B2C;&#x4E00;&#x4E2A;&#x95EE;&#x9898; <a href="#di-yi-ge-wen-ti" class="header-anchor">#</a></h2><p>&#x4F60;&#x4E00;&#x5B9A;&#x4F1A;&#x78B0;&#x5230; disk/file system&#x95EE;&#x9898;</p>
+<ul>
+<li>&#x6700;&#x5F00;&#x59CB;&#x4F7F;&#x7528;&#x7684; <code>aufs</code>&#xFF0C;&#x4F46;&#x662F;&#x5F88;&#x5FEB;&#x5C31;&#x78B0;&#x5230;&#x4E86;42&#x5C42;&#x9650;&#x5236;</li>
+<li>&#x7136;&#x540E;&#x6362;&#x5230;&#x4E86; <code>device mapper</code>&#xFF0C;&#x7ED3;&#x679C;&#x975E;&#x5E38;&#x60B2;&#x60E8;&#xFF0C;&#x56F4;&#x7ED5;&#x7740;<code>CentOS</code>&#x78B0;&#x5230;&#x4E86;&#x5F88;&#x591A;&#x95EE;&#x9898;&#xFF1B;</li>
+<li>&#x6362;&#x5230;ubuntu&#x597D;&#x4E00;&#x4E9B;&#xFF0C;&#x6362;&#x56DE; <code>aufs</code>&#xFF0C;&#x89E3;&#x9664;&#x4E86;42&#x5C42;&#x9650;&#x5236;&#xFF0C;&#x4F46;&#x8FD8;&#x6709;&#x95EE;&#x9898;&#xFF0C;&#x5206;&#x5C42;&#x3001;&#x7ED1;&#x5B9A;&#xFF1B;</li>
+<li>&#x5347;&#x7EA7;&#x5230; <code>Docker 1.7</code> &#x540E;&#xFF0C;&#x6216;&#x8BB8;&#x4F1A;&#x6362;&#x56DE; CentOS &#x548C; Device mapper&#xFF0C;&#x56E0;&#x4E3A; dynamic binaries&#x3002;</li>
+</ul>
+<p>&#x63A8;&#x8350;&#x7406;&#x89E3;&#x5BB9;&#x5668;&#x5B58;&#x50A8;&#x7684;&#x53EF;&#x89C6;&#x5316;&#x94FE;&#x63A5;&#xFF1A;<br><a href="http://merrigrove.blogspot.com/2015/10/visualizing-docker-containers-and-images.html?m=1" target="_blank" rel="external">http://merrigrove.blogspot.com/2015/10/visualizing-docker-containers-and-images.html?m=1</a></p>
+<h2 id="nei-he-ban-ben-hen-chong-yao"><a href="#&#x5185;&#x6838;&#x7248;&#x672C;&#x5F88;&#x91CD;&#x8981;" class="headerlink" title="&#x5185;&#x6838;&#x7248;&#x672C;&#x5F88;&#x91CD;&#x8981;"></a>&#x5185;&#x6838;&#x7248;&#x672C;&#x5F88;&#x91CD;&#x8981; <a href="#nei-he-ban-ben-hen-chong-yao" class="header-anchor">#</a></h2><h2 id="zhao-ge-hao-de-registry"><a href="#&#x627E;&#x4E2A;&#x597D;&#x7684;registry" class="headerlink" title="&#x627E;&#x4E2A;&#x597D;&#x7684;registry"></a>&#x627E;&#x4E2A;&#x597D;&#x7684;registry <a href="#zhao-ge-hao-de-registry" class="header-anchor">#</a></h2><p>&#x6BD4;&#x5982;</p>
+<ul>
+<li><a href="https://hub.docker.com" target="_blank" rel="external">https://hub.docker.com</a></li>
+<li><a href="https://quay.io" target="_blank" rel="external">https://quay.io</a></li>
+<li>Docker Trusted Registry</li>
+</ul>
+<p>&#x6700;&#x5F00;&#x59CB;&#x5C1D;&#x8BD5;&#x4E86;<code>registry</code>&#xFF0C;&#x5F88;&#x591A;bug&#xFF0C;&#x5F88;&#x591A;fail pull/push<br>&#x7136;&#x540E;&#x5C1D;&#x8BD5;&#x4E86; <code>quay.io</code>&#xFF0C;happy&#x4F46;&#x662F;&#x5F88;&#x6162;(&#x6709;&#x4E9B;image&#x5F97;700&#x591A;MB)&#xFF0C;&#x800C;&#x4E14;&#x82B1;&#x94B1;&#x554A;&#x2026;&#x2026;<br>&#x540E;&#x6765;&#x53C8;&#x56DE;&#x5230;&#x4E86; <code>docker registry 0.9</code>&#xFF0C;&#x76EE;&#x524D;&#x7A33;&#x5B9A;&#x591A;&#x4E86;&#x3002;<br>&#x6A2A;&#x5411;&#x6269;&#x5C55;&#xFF0C;&#x975E;&#x5E38;&#x597D;&#xFF1B;<br>&#x76EE;&#x524D;&#x5728;&#x5347;&#x7EA7;&#x5230; <code>registry 2.1</code></p>
+<h2 id="zai-aws-bu-shu"><a href="#&#x5728;AWS&#x90E8;&#x7F72;" class="headerlink" title="&#x5728;AWS&#x90E8;&#x7F72;"></a>&#x5728;AWS&#x90E8;&#x7F72; <a href="#zai-aws-bu-shu" class="header-anchor">#</a></h2><p>&#x7528;&#x7684;&#x662F;<code>Beanstalk</code>&#xFF0C; <code>ELB</code>&#x8FDB;&#x884C;&#x8D1F;&#x8F7D;&#x5747;&#x8861;&#x6A2A;&#x5411;&#x6269;&#x5C55;&#xFF0C;&#x4F7F;&#x7528;<code>Elasticcache(redis)</code>&#x505A;cache&#xFF0C;&#x7528;<code>S3</code>&#x505A;&#x5B58;&#x50A8;&#x3002;</p>
+<h2 id="mei-ge-zhu-ji-you-yue-shao-de-rong-qi-yue-hao"><a href="#&#x6BCF;&#x4E2A;&#x4E3B;&#x673A;&#x6709;&#x8D8A;&#x5C11;&#x7684;&#x5BB9;&#x5668;&#x8D8A;&#x597D;" class="headerlink" title="&#x6BCF;&#x4E2A;&#x4E3B;&#x673A;&#x6709;&#x8D8A;&#x5C11;&#x7684;&#x5BB9;&#x5668;&#x8D8A;&#x597D;"></a>&#x6BCF;&#x4E2A;&#x4E3B;&#x673A;&#x6709;&#x8D8A;&#x5C11;&#x7684;&#x5BB9;&#x5668;&#x8D8A;&#x597D; <a href="#mei-ge-zhu-ji-you-yue-shao-de-rong-qi-yue-hao" class="header-anchor">#</a></h2><p>&#x5982;&#x679C;&#x67D0;&#x4E2A;&#x5BB9;&#x5668;&#x7684;CPU, DISK IO&#xFF0C;&#x7F51;&#x7EDC;IO&#xFF0C;&#x5185;&#x5B58;&#x51FA;&#x73B0;&#x4E86;&#x4F7F;&#x7528;&#x5CF0;&#x503C;&#xFF0C;&#x5176;&#x5B83;&#x7684;&#x5BB9;&#x5668;&#x90FD;&#x4F1A;&#x88AB;&#x5E72;&#x6270;&#x3002;&#x5B89;&#x5168;&#x95EE;&#x9898;&#x3002;</p>
+<h2 id="ci-cd-with-docker"><a href="#CI-CD-with-Docker" class="headerlink" title="CI/CD with Docker"></a>CI/CD with Docker <a href="#ci-cd-with-docker" class="header-anchor">#</a></h2><p>huge ROI with docker</p>
+<p>GitHub.com &#x2192; Teamcity &#x2192; agents &#x2192; Registry &#x2192; Server</p>
+<p>&#x4ECE;&#x524D; agents &#x662F;&#x5728;docker&#x91CC;&#x7684;&#xFF0C;docker in docker&#xFF0C;&#x73B0;&#x5728;&#x662F;&#x4F7F;&#x7528;<code>chef</code>&#x548C;<code>packer</code>&#x3002;</p>
+<p>&#x63A8;&#x8350;&#x6587;&#x7AE0;&#xFF0C;&#x4E3A;&#x4EC0;&#x4E48;&#x4E0D;&#x8981;&#x4F7F;&#x7528;Docker in docker&#xFF1A;<br><a href="https://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci/" target="_blank" rel="external">https://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci/</a></p>
+<h2 id="beanstalk-architecture"><a href="#Beanstalk-architecture" class="headerlink" title="Beanstalk architecture"></a>Beanstalk architecture <a href="#beanstalk-architecture" class="header-anchor">#</a></h2><h2 id="yi-nian-qian"><a href="#&#x4E00;&#x5E74;&#x524D;" class="headerlink" title="&#x4E00;&#x5E74;&#x524D;"></a>&#x4E00;&#x5E74;&#x524D; <a href="#yi-nian-qian" class="header-anchor">#</a></h2><p>CoreOS&#x521A;&#x63A8;&#x51FA;&#xFF0C;&#x89C9;&#x5F97;&#x8D85;&#x9177;&#xFF0C;&#x7136;&#x540E;&#x7528;&#x4E86;&#xFF0C;&#x7ED3;&#x679C;&#x5931;&#x8D25;&#x7684;&#x5F88;&#x60E8;</p>
+<h1 id="zong-jie"><a href="#&#x603B;&#x7ED3;" class="headerlink" title="&#x603B;&#x7ED3;"></a>&#x603B;&#x7ED3; <a href="#zong-jie" class="header-anchor">#</a></h1><p>&#x521A;&#x5F00;&#x59CB;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x7528;&#x4F60;&#x719F;&#x6089;&#x7684;&#x5DE5;&#x5177;<br>&#x4F60;&#x9700;&#x8981;&#x8003;&#x8651;&#x6A2A;&#x5411;&#x6269;&#x5C55;<br>&#x5B89;&#x5168;&#x4E0D;&#x96BE;&#xFF0C;&#x4F46;&#x662F;&#x4E00;&#x5B9A;&#x8981;&#x8003;&#x8651;<br>&#x8BB8;&#x591A;&#x8F6F;&#x4EF6;&#x4F9B;&#x5E94;&#x5546;&#x8FDB;&#x5165;&#x5230;&#x4E86;&#x5BB9;&#x5668;&#x9886;&#x57DF;<br>&#x5411; PaaS &#x7684;&#x65B9;&#x5411;&#x6784;&#x5EFA;<br>&#x8981;&#x77E5;&#x9053;&#x4F60;&#x8981;&#x89E3;&#x51B3;&#x7684;&#x95EE;&#x9898;</p>
+</div></article><div class="pagination"><a href="/post/docker-2016-06-22-video-docker-online-meetup-28-production-ready-docker-swarm.html" class="pagination-prev">PREV</a><a href="/post/docker-2016-06-21-video-docker-online-meetup-13-introducing-machine-swarm-compose.html" class="pagination-next">NEXT</a></div><div class="comments"><div data-thread-key="post/docker-2016-06-21-video-how-to-be-successful-running-docker-in-production.html" data-title="视频笔记：如何成功在生产环境中运行 Docker - John Fiedler" data-url="http://blog.lab99.org/post/docker-2016-06-21-video-how-to-be-successful-running-docker-in-production.html" class="ds-thread"></div></div></div><aside class="sidebar"><h3>分类标签</h3><ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Sonatype/">Sonatype</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/coreos/">coreos</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker-summit/">docker summit</a></li></ul><h3>最新文章</h3><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/post/docker-2016-12-07-video-persistent-storage-tailored-for-containers.html">视频笔记：为容器定制的持久化存储方案 - Infinit - Quentin Hocquet</a></li><li class="post-list-item"><a class="post-list-link" href="/post/docker-2016-11-14-what-is-new-in-docker-1-13.html">Docker 1.13 新增功能</a></li><li class="post-list-item"><a class="post-list-link" href="/post/docker-2016-08-12-video-windows-server-and-docker.html">视频笔记： Windows Server 和 Docker - John Starks</a></li><li class="post-list-item"><a class="post-list-link" href="/post/docker-2016-08-08-video-docker-ops-docker-networking-deep-dive-considerations-and-troubleshooting.html">视频笔记：Docker 运维 - Docker Networking 进阶指南 - Madhu Venugopal</a></li><li class="post-list-item"><a class="post-list-link" href="/post/docker-2016-07-26-video-docker-for-ops-docker-storage-and-volumes-deep-dive-and-considerations.html">视频笔记：Docker 运维 - Docker Storage 和 Volumes 进阶指南 - Brian Goff</a></li><li class="post-list-item"><a class="post-list-link" href="/post/docker-2016-07-21-video-green-font-black-background-docker-security-by-example.html">视频笔记：绿字黑屏 - Docker 安全示例 - Diogo Mónica</a></li><li class="post-list-item"><a class="post-list-link" href="/post/docker-2016-07-14-faq.html">Docker 问答录</a></li><li class="post-list-item"><a class="post-list-link" href="/post/docker-2016-07-12-video-moby-cool-hack-session-dockercon.html">视频笔记：Moby 的 Cool Hack session</a></li></ul></aside></section></div><div class="extra"></div><footer class="footer"><div class="row-flex-row limit-width vh-center"><div class="copyright"><P>© 2016 <a href="/">王涛</P></div><div class="power"><p><a href="http://pinggod.com/">Sean Sun</a>, 
+<a href="https://hexo.io">Hexo</a>, 
+<a href="https://github.com/">GitHub</a>, 
+<a href="https://jekyllrb.com/">Jekyll</a></p></div></div></footer><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-80785538-1",'auto');ga('send','pageview');</script><script>var _hmt = _hmt || [];(function() {var hm = document.createElement("script");hm.src = "//hm.baidu.com/hm.js?ee75cf08ad330aa99f8540efa2570970";var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s);})();</script><script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script>var duoshuoQuery = {short_name:"twang2218-coding"};
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();
+</script></body></html>

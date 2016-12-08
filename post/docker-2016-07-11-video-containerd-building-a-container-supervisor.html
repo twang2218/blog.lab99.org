@@ -1,0 +1,163 @@
+<!DOCTYPE html><html lang="zh-cn"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 视频笔记：Containerd - 构建容器 Supervisor - Michael Crosby · 大桥下的蜗牛</title><meta name="description" content="无善无恶心之体，有善有恶意之动，知善知恶是良知，为善去恶是格物。"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.png"><link rel="stylesheet" href="/css/jekyll.css"><!--[if lt IE 9]>
+<script src="js/html5shiv.min.js"></script>
+<script src="js/respond.min.js"></script>
+<![endif]--></head><body><header class="row-flex-row limit-width vh-center"><a href="/" class="logo"><img src="/favicon.png"></a><nav><ul class="nav-list"><li class="nav-list-item"><a href="/" class="nav-link">主页</a></li><li class="nav-list-item"><a href="/archives/" class="nav-link active">   博客</a></li><li class="nav-list-item"><a href="https://github.com/twang2218" target="_blank" class="nav-link">github</a></li><li class="nav-list-item"><a href="https://coding.net/u/twang2218" target="_blank" class="nav-link">coding</a></li><li class="nav-list-item"><a href="/atom.xml" class="nav-link">rss</a></li></ul></nav></header><div class="container limit-width"><section class="row-flex-row"><div class="post"><article class="post-block"><h2 class="post-title"><a href="/post/docker-2016-07-11-video-containerd-building-a-container-supervisor.html" class="post-title-link">视频笔记：Containerd - 构建容器 Supervisor - Michael Crosby</a></h2><div class="post-meta"><ul class="post-tag-list"><li class="post-tag-item"><a href="/tags/docker/" class="post-tag-link">docker</a></li><li class="post-tag-item"><a href="/tags/youtube/" class="post-tag-link">youtube</a></li><li class="post-tag-item"><a href="/tags/notes/" class="post-tag-link">notes</a></li><li class="post-tag-item"><a href="/tags/dockercon16/" class="post-tag-link">dockercon16</a></li></ul><div class="post-time">2016年7月11日 星期一</div></div><div class="post-content"><link rel="stylesheet" href="/style/owl.css"><!-- toc -->
+<ul>
+<li><a href="#shi-pin-xin-xi">&#x89C6;&#x9891;&#x4FE1;&#x606F;</a></li>
+<li><a href="#whoami">&gt; whoami</a></li>
+<li><a href="#man-containerd">&gt; man containerd</a></li>
+<li><a href="#why">&gt; why</a></li>
+<li><a href="#benchmarks">Benchmarks</a></li>
+<li><a href="#events">events</a></li>
+<li><a href="#daemonless">&gt; daemonless</a><ul>
+<li><a href="#container-state">&gt; container state</a></li>
+<li><a href="#daemonless-problems">&gt; daemonless problems</a><ul>
+<li><a href="#containerd-shim">&gt; containerd-shim</a></li>
+<li><a href="#exit-status">&gt; exit status</a></li>
+<li><a href="#stdio">&gt; stdio</a></li>
+<li><a href="#re-parenting">&gt; re-parenting</a></li>
+</ul>
+</li>
+<li><a href="#the-oom-problem">&gt; The OOM problem</a><ul>
+<li><a href="#runtime-workflow">&gt; runtime workflow</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#yan-shi-dai-ma">&#x6F14;&#x793A;&#x4EE3;&#x7801;</a></li>
+</ul>
+<!-- tocstop -->
+<h1 id="shi-pin-xin-xi"><a href="#&#x89C6;&#x9891;&#x4FE1;&#x606F;" class="headerlink" title="&#x89C6;&#x9891;&#x4FE1;&#x606F;"></a>&#x89C6;&#x9891;&#x4FE1;&#x606F; <a href="#shi-pin-xin-xi" class="header-anchor">#</a></h1><p>DockerCon 16 - Containerd - Building a Container Supervisor<br>by Michael Crosby</p>
+<div class="owl-media owl-video owl-youtube"><iframe src="//www.youtube.com/embed/VWuHWfEB6ro" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen></iframe></div>
+<p><a href="https://www.youtube.com/watch?v=VWuHWfEB6ro" target="_blank" rel="external">https://www.youtube.com/watch?v=VWuHWfEB6ro</a></p>
+<div class="owl-media owl-video owl-tencent"><embed src="http://static.video.qq.com/TPout.swf?vid=q0314svqva0&amp;auto=0" type="application/x-shockwave-flash" quality="high" allowfullscreen="true" align="middle" allowscriptaccess="always"></div>
+<p><a href="http://v.qq.com/x/page/q0314svqva0.html" target="_blank" rel="external">http://v.qq.com/x/page/q0314svqva0.html</a></p>
+<h1 id="whoami"><a href="#gt-whoami" class="headerlink" title="&gt; whoami"></a>&gt; whoami <a href="#whoami" class="header-anchor">#</a></h1><ul>
+<li>&#x81EA; Docker 0.3 &#x5F00;&#x59CB;&#x5C31;&#x662F;&#x4ECB;&#x5165;&#x5F00;&#x53D1;&#xFF0C;0.5&#x5F00;&#x59CB;&#x5C31;&#x662F; maintainer &#xFF08;&#x5C31;&#x662F;&#x4ECE;&#x7ED1;&#x5B9A; localhost &#x53D8;&#x6210;&#x7ED1;&#x5B9A; socket&#xFF0C;&#x55EF;&#xFF0C;&#x7ED3;&#x679C;&#x6240;&#x6709;&#x4EBA;&#x7684;&#x73AF;&#x5883;&#x90FD;&#x51FA;&#x95EE;&#x9898;&#x4E86;&#xFF09;</li>
+<li>dockerui &#x7684;&#x4F5C;&#x8005;</li>
+<li>libcontainer &#x7684;&#x4F5C;&#x8005;</li>
+<li>nsinit &#x7684;&#x4F5C;&#x8005;</li>
+<li>runc &#x7684;&#x4F5C;&#x8005;</li>
+<li>containerd &#x7684;&#x4F5C;&#x8005;</li>
+<li>OCI &#x7684;maintainer</li>
+</ul>
+<h1 id="man-containerd"><a href="#gt-man-containerd" class="headerlink" title="&gt; man containerd"></a>&gt; man containerd <a href="#man-containerd" class="header-anchor">#</a></h1><ul>
+<li><p>&#x975E;&#x5E38;&#x8F7B;&#x91CF;&#x7EA7;&#x7684;&#x5BB9;&#x5668; supervisor</p>
+<ul>
+<li>&#x5F88;&#x591A;&#x4EBA;&#x8BF4;&#x8FD9;&#x662F;&#x5728;&#x53D6;&#x4EE3; systemd&#xFF0C;&#x4E0D;&#x662F;&#x8FD9;&#x6837;&#x7684;&#xFF0C;&#x8FD9;&#x4E2A;&#x4E13;&#x6CE8;&#x4E8E;&#x5BB9;&#x5668;</li>
+</ul>
+</li>
+<li><p>runC (OCI) multiplexer</p>
+<ul>
+<li>&#x867D;&#x7136;&#x53EB;containerd&#xFF0C;&#x4F46;&#x662F;&#x771F;&#x6B63;&#x521B;&#x5EFA;&#x5BB9;&#x5668;&#x7684;&#x662F;runC(OCI)&#x5C42;</li>
+</ul>
+</li>
+<li><p>&#x5BB9;&#x5668;&#x751F;&#x5B58;&#x5468;&#x671F;&#x64CD;&#x4F5C;</p>
+</li>
+</ul>
+<h1 id="why"><a href="#gt-why" class="headerlink" title="&gt; why"></a>&gt; why <a href="#why" class="header-anchor">#</a></h1><ul>
+<li>&#x96C6;&#x6210; runc</li>
+<li>&#x652F;&#x6301;&#x591A;&#x4E2A; runtime</li>
+<li>Execution v2</li>
+<li>&#x5206;&#x79BB;&#x6267;&#x884C;&#x673A;&#x6784;&#x548C;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;</li>
+<li>daemonless &#x5BB9;&#x5668;</li>
+<li>&#x66F4;&#x5E72;&#x51C0;&#x7684;&#x5F00;&#x53D1;&#x73AF;&#x5883;</li>
+</ul>
+<h1 id="benchmarks"><a href="#Benchmarks" class="headerlink" title="Benchmarks"></a>Benchmarks <a href="#benchmarks" class="header-anchor">#</a></h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ ./benchmark -count 100</div><div class="line">INFO[0001] 1.149902846 seconds</div></pre></td></tr></table></figure>
+<p>&#x6D4B;&#x8BD5;containerd:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo containerd &#x2014;debug` &#x7136;&#x540E;&#x53E6;&#x4E00;&#x8FB9;&#x8FD0;&#x884C; `sudo ./benchmark -count 100</div></pre></td></tr></table></figure>
+<h1 id="events"><a href="#events" class="headerlink" title="events"></a>events <a href="#events" class="header-anchor">#</a></h1><ul>
+<li><p>&#x65E0;&#x9501; event loop</p>
+</li>
+<li><p>&#x5E76;&#x53D1;&#x63A7;&#x5236;</p>
+<ul>
+<li>&#x4E00;&#x6B21;&#x5E76;&#x53D1;10&#x4E2A;&#x53EF;&#x80FD;&#x4F1A;&#x6BD4;&#x5E76;&#x53D1;100&#x4E2A;&#x66F4;&#x5FEB;&#x3002;</li>
+</ul>
+</li>
+</ul>
+<h1 id="daemonless"><a href="#gt-daemonless" class="headerlink" title="&gt; daemonless"></a>&gt; daemonless <a href="#daemonless" class="header-anchor">#</a></h1><p>&#x8FD9;&#x662F;&#x4E00;&#x4E2A;&#x975E;&#x5E38;&#x5E38;&#x89C1;&#x7684;&#x9700;&#x6C42;&#xFF0C;Docker&#x5347;&#x7EA7;&#x975E;&#x5E38;&#x5FEB;&#xFF0C;&#x4F46;&#x662F;&#x6BCF;&#x6B21;&#x5347;&#x7EA7;&#x6240;&#x6709;&#x7684;&#x5BB9;&#x5668;&#x90FD;&#x4F1A;&#x88AB;kill&#x6389;&#x7136;&#x540E;&#x91CD;&#x65B0;&#x8FD0;&#x884C;&#x3002;&#x6240;&#x4EE5;&#x9700;&#x8981;&#x66F4;&#x5E73;&#x6ED1;&#x7684;&#x5347;&#x7EA7;&#x65B9;&#x5F0F;&#xFF0C;&#x5347;&#x7EA7;Docker&#x4E0D;&#x4F1A;&#x8BA9;&#x5BB9;&#x5668;&#x6B7B;&#x6389;&#x3002;</p>
+<h2 id="container-state"><a href="#gt-container-state" class="headerlink" title="&gt; container state"></a>&gt; container state <a href="#container-state" class="header-anchor">#</a></h2><ul>
+<li>&#x6700;&#x7B80;&#x5355;&#x7684;&#x7BA1;&#x7406;&#x72B6;&#x6001;&#x7684;&#x529E;&#x6CD5;&#x5C31;&#x662F;&#x8BA9;&#x5BB9;&#x5668;&#x6CA1;&#x6709;&#x72B6;&#x6001;</li>
+<li>&#x5185;&#x5B58;&#x91CC;&#x4EC0;&#x4E48;&#x90FD;&#x4E0D;&#x4FDD;&#x5B58;</li>
+<li>/run &#x662F;&#x4F60;&#x7684;&#x597D;&#x670B;&#x53CB;</li>
+</ul>
+<p>&#x5BB9;&#x5668;&#x53EA;&#x662F;&#x4E2A;&#x8FDB;&#x7A0B;&#xFF0C;&#x6240;&#x4EE5;&#x53EA;&#x9700;&#x8981; pid &#x548C; path &#x6307;&#x5411;&#x5BF9;&#x5E94;&#x7684;&#x4F4D;&#x7F6E;&#x5373;&#x53EF;&#x6062;&#x590D;&#x6240;&#x6709;&#x7684;&#x4E1C;&#x897F;&#xFF0C;&#x800C;&#x4E0D;&#x9700;&#x8981;&#x5728;&#x5185;&#x5B58;&#x4E2D;&#x6709;&#x4E00;&#x4E2A;&#x590D;&#x6742;&#x7684;&#x7ED3;&#x6784;&#x53BB;&#x4FDD;&#x5B58;&#x8FD9;&#x4E9B;&#x72B6;&#x6001;&#x4FE1;&#x606F;&#x3002;</p>
+<h2 id="daemonless-problems"><a href="#gt-daemonless-problems" class="headerlink" title="&gt; daemonless problems"></a>&gt; daemonless problems <a href="#daemonless-problems" class="header-anchor">#</a></h2><ul>
+<li>&#x9000;&#x51FA;&#x4EE3;&#x7801;&#x548C;wait4()</li>
+<li>tty / stdio</li>
+<li>reparenting</li>
+<li>facilitated by a shim</li>
+</ul>
+<h3 id="containerd-shim"><a href="#gt-containerd-shim" class="headerlink" title="&gt; containerd-shim"></a>&gt; containerd-shim <a href="#containerd-shim" class="header-anchor">#</a></h3><blockquote>
+<p><code>containerd</code> &#x2192; <code>&#x591A;&#x4E2A; shim</code> &#x2192; <code>&#x6BCF;&#x4E2A; shim</code> &#x5BF9;&#x5E94; <code>&#x4E00;&#x4E2A; runc</code></p>
+</blockquote>
+<p><code>shim</code> &#x89E3;&#x51B3;&#x4E86; <code>tty</code> / <code>stdio</code> &#x548C; <code>reparenting</code> &#x95EE;&#x9898;</p>
+<h3 id="exit-status"><a href="#gt-exit-status" class="headerlink" title="&gt; exit status"></a>&gt; exit status <a href="#exit-status" class="header-anchor">#</a></h3><ul>
+<li><p>FIFO for blocking + file</p>
+<ul>
+<li>fifo (Pipe with inode) for exit event</li>
+<li>file for exit status</li>
+</ul>
+</li>
+<li><p>O_CLOEXEC</p>
+</li>
+<li><p>RDONLY/WRONLY</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (mkfifo(&#x201C;<span class="built_in">exit</span>-fifo&#x201D;, <span class="number">0666</span>) != <span class="number">0</span>) {</div><div class="line">    <span class="built_in">printf</span>(&#x201C;%s\n&#x201D;, strerror(errno));</div><div class="line">    <span class="built_in">exit</span>(EXIT_FAILURE);</div><div class="line">}</div><div class="line"><span class="keyword">int</span> fd = open(&#x201C;<span class="built_in">exit</span>-fifo&#x201D;, O_WRONLY | O_CLOEXEC, <span class="number">0</span>);</div></pre></td></tr></table></figure>
+<h3 id="stdio"><a href="#gt-stdio" class="headerlink" title="&gt; stdio"></a>&gt; stdio <a href="#stdio" class="header-anchor">#</a></h3><ul>
+<li><p>FIFOs for data</p>
+</li>
+<li><p>fifos have a buffer (default 64k)</p>
+<ul>
+<li>/proc/sys/fs/pipe-max-size</li>
+</ul>
+</li>
+</ul>
+<h3 id="re-parenting"><a href="#gt-re-parenting" class="headerlink" title="&gt; re-parenting"></a>&gt; re-parenting <a href="#re-parenting" class="header-anchor">#</a></h3><blockquote>
+<p><code>shim</code> &#x2192; <code>runc</code> &#x2192; <code>container</code></p>
+</blockquote>
+<p>&#x5F53; <code>runc</code> &#x9000;&#x51FA;&#x540E;&#xFF0C;<code>container</code> &#x53EF;&#x4EE5; <code>reparent</code> &#x5230; <code>shim</code>&#x3002;</p>
+<h4 id="re-parenting-rules"><a href="#gt-re-parenting-rules" class="headerlink" title="&gt; re-parenting rules"></a>&gt; re-parenting rules <a href="#re-parenting-rules" class="header-anchor">#</a></h4><ul>
+<li>&#x4F60;&#x7684; <code>parent</code> &#x662F; <code>fork</code> &#x4F60;&#x7684;&#x8FDB;&#x7A0B;</li>
+<li>&#x5982;&#x679C;&#x4F60;&#x7684; <code>parent</code> die&#xFF0C;&#x4F60;&#x65B0;&#x7684;<code>parent</code>&#x662F; <code>PID 1</code></li>
+</ul>
+<p>&#x5728; 3.4 &#x4E4B;&#x524D;&#xFF0C;&#x662F;&#x8FD9;&#x6837;&#x7684;&#xFF0C;&#x4F46;&#x662F; 3.4 &#x4E4B;&#x540E;&#xFF0C;&#x589E;&#x52A0;&#x4E86;&#x4E2A; <code>subreaper</code></p>
+<ul>
+<li><code>prctl</code> - <code>PR_SET_CHILD_SUBREAPER</code></li>
+<li>&#x201C;In effect, a subreaper fulfills the role of init(1) for its descendant processes.&#x201D;</li>
+</ul>
+<p>&#x6240;&#x4EE5;&#x50CF;&#x521A;&#x624D;&#x8BF4;&#x7684;&#x60C5;&#x51B5;&#xFF0C;<code>shim</code> &#x2192; <code>runc</code> &#x2192; <code>container</code>&#xFF0C;&#x5982;&#x679C;<code>runc</code>&#x9000;&#x51FA;&#xFF0C;&#x6B63;&#x5E38;&#x60C5;&#x51B5;&#xFF0C;<code>container</code> &#x5C06;&#x4F1A;&#x6210;&#x4E3A; <code>init</code> (<code>pid:1</code>) &#x7684;<code>child</code>&#xFF0C;&#x800C;<code>shim</code>&#x4F7F;&#x7528;&#x4E86;<code>subreaper</code> &#x540E;&#xFF0C;&#x5C06;&#x4F1A;&#x622A;&#x65AD;&#x8FD9;&#x4E2A;&#x6536;&#x517B;&#x8FDB;&#x7A0B;&#x7684;&#x4E0A;&#x6EAF;&#x8FC7;&#x7A0B;&#xFF0C;<code>shim</code> &#x5C06;&#x6210;&#x4E3A; <code>container</code> &#x7684;&#x65B0; <code>parent</code>&#x3002;</p>
+<h2 id="the-oom-problem"><a href="#gt-The-OOM-problem" class="headerlink" title="&gt; The OOM problem"></a>&gt; The OOM problem <a href="#the-oom-problem" class="header-anchor">#</a></h2><p>&#x5982;&#x4F55;&#x5728;&#x7528;&#x6237;&#x8FDB;&#x7A0B;&#x542F;&#x52A8;&#x524D;&#x8FDE;&#x63A5;&#x5230; OOM (<code>Out of Memory</code>) &#x901A;&#x77E5;</p>
+<h3 id="runtime-workflow"><a href="#gt-runtime-workflow" class="headerlink" title="&gt; runtime workflow"></a>&gt; runtime workflow <a href="#runtime-workflow" class="header-anchor">#</a></h3><ul>
+<li><p><code>create</code></p>
+<ul>
+<li>&#x521D;&#x59CB;&#x5316;<code>namespace</code>&#x548C;&#x914D;&#x7F6E;</li>
+</ul>
+</li>
+<li><p><code>start</code></p>
+<ul>
+<li>&#x6267;&#x884C;&#x7528;&#x6237;&#x8FDB;&#x7A0B;</li>
+</ul>
+</li>
+<li><p><code>delete</code></p>
+<ul>
+<li>&#x5220;&#x9664;&#x5BB9;&#x5668;</li>
+</ul>
+</li>
+</ul>
+<p>&#x8FD9;&#x6837;&#x5728; <code>create</code> &#x548C; <code>start</code> &#x4E2D;&#x95F4;&#xFF0C;&#x53EF;&#x4EE5;&#x6709;&#x5F88;&#x591A;&#x5904;&#x7406;&#x4E8B;&#x52A1;&#x7684;&#x673A;&#x4F1A;&#xFF0C;&#x5305;&#x62EC;&#x5904;&#x7406; <code>OOM</code> &#x7684;&#x60C5;&#x51B5;&#x3002;</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">runc create <span class="built_in">test</span></div><div class="line">runc list</div><div class="line">runc start <span class="built_in">test</span></div></pre></td></tr></table></figure>
+<h1 id="yan-shi-dai-ma"><a href="#&#x6F14;&#x793A;&#x4EE3;&#x7801;" class="headerlink" title="&#x6F14;&#x793A;&#x4EE3;&#x7801;"></a>&#x6F14;&#x793A;&#x4EE3;&#x7801; <a href="#yan-shi-dai-ma" class="header-anchor">#</a></h1><p><a href="https://github.com/crosbymichael/dockercon-2016" target="_blank" rel="external">https://github.com/crosbymichael/dockercon-2016</a></p>
+</div></article><div class="pagination"><a href="/post/docker-2016-07-11-video-docker-for-developer-part-1.html" class="pagination-prev">PREV</a><a href="/post/docker-2016-07-08-video-best-practices-for-docker-monitoring-with-fluentd-and-datadog.html" class="pagination-next">NEXT</a></div><div class="comments"><div data-thread-key="post/docker-2016-07-11-video-containerd-building-a-container-supervisor.html" data-title="视频笔记：Containerd - 构建容器 Supervisor - Michael Crosby" data-url="http://blog.lab99.org/post/docker-2016-07-11-video-containerd-building-a-container-supervisor.html" class="ds-thread"></div></div></div><aside class="sidebar"><h3>分类标签</h3><ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Sonatype/">Sonatype</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/coreos/">coreos</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker-summit/">docker summit</a></li></ul><h3>最新文章</h3><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/post/docker-2016-12-07-video-persistent-storage-tailored-for-containers.html">视频笔记：为容器定制的持久化存储方案 - Infinit - Quentin Hocquet</a></li><li class="post-list-item"><a class="post-list-link" href="/post/docker-2016-11-14-what-is-new-in-docker-1-13.html">Docker 1.13 新增功能</a></li><li class="post-list-item"><a class="post-list-link" href="/post/docker-2016-08-12-video-windows-server-and-docker.html">视频笔记： Windows Server 和 Docker - John Starks</a></li><li class="post-list-item"><a class="post-list-link" href="/post/docker-2016-08-08-video-docker-ops-docker-networking-deep-dive-considerations-and-troubleshooting.html">视频笔记：Docker 运维 - Docker Networking 进阶指南 - Madhu Venugopal</a></li><li class="post-list-item"><a class="post-list-link" href="/post/docker-2016-07-26-video-docker-for-ops-docker-storage-and-volumes-deep-dive-and-considerations.html">视频笔记：Docker 运维 - Docker Storage 和 Volumes 进阶指南 - Brian Goff</a></li><li class="post-list-item"><a class="post-list-link" href="/post/docker-2016-07-21-video-green-font-black-background-docker-security-by-example.html">视频笔记：绿字黑屏 - Docker 安全示例 - Diogo Mónica</a></li><li class="post-list-item"><a class="post-list-link" href="/post/docker-2016-07-14-faq.html">Docker 问答录</a></li><li class="post-list-item"><a class="post-list-link" href="/post/docker-2016-07-12-video-moby-cool-hack-session-dockercon.html">视频笔记：Moby 的 Cool Hack session</a></li></ul></aside></section></div><div class="extra"></div><footer class="footer"><div class="row-flex-row limit-width vh-center"><div class="copyright"><P>© 2016 <a href="/">王涛</P></div><div class="power"><p><a href="http://pinggod.com/">Sean Sun</a>, 
+<a href="https://hexo.io">Hexo</a>, 
+<a href="https://github.com/">GitHub</a>, 
+<a href="https://jekyllrb.com/">Jekyll</a></p></div></div></footer><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-80785538-1",'auto');ga('send','pageview');</script><script>var _hmt = _hmt || [];(function() {var hm = document.createElement("script");hm.src = "//hm.baidu.com/hm.js?ee75cf08ad330aa99f8540efa2570970";var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s);})();</script><script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script>var duoshuoQuery = {short_name:"twang2218-coding"};
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();
+</script></body></html>
