@@ -18,8 +18,6 @@ before_deploy:
     - ls -al
 deploy:
     provider: script
-    script:
-        - ls -al
-        - yarn deploy
+    script: yarn deploy
 after_deploy:
     - rm ../coding-deploy-key
