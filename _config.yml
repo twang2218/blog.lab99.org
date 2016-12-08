@@ -107,8 +107,7 @@ baidu_analytics: //hm.baidu.com/hm.js?ee75cf08ad330aa99f8540efa2570970
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   - type: git
-    # repo: git@git.coding.net:twang2218/twang2218.git
-    repo: git@github.com:twang2218/blog.lab99.org.git
+    repo: git@git.coding.net:twang2218/twang2218.git
     branch: coding-pages
     name: Tao Wang
     email: twang2218@gmail.com
