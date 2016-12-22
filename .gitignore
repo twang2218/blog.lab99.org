@@ -3,6 +3,8 @@ db.json
 public/
 .deploy*/
 #themes/jekyll/
+coding-deploy-key
+coding-deploy-key.pub
 
 # Created by https://www.gitignore.io/api/linux,node,osx
 
