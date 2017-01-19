@@ -8,11 +8,11 @@ tags: [docker, blog]
 
 <!-- toc -->
 
-*2017年1月19日更新*
- 
 # 前言
 
-`Docker 1.13` 即将在 2017 年 1 月 18 日发布了。从 2016 年 7 月 29 日发布 `1.12` 发布以来，已经过去 5 个多月了，对于活跃的 Docker 社区来说，已经很久了，让我们看看都 `1.13` 都新增了什么内容吧。
+*2017年1月19日更新*
+
+`Docker 1.13` 在 2017 年 1 月 18 日发布了。从 2016 年 7 月 29 日发布 `1.12` 发布以来，已经过去 5 个多月了，对于活跃的 Docker 社区来说，已经很久了，让我们看看都 `1.13` 都新增了什么内容吧。
 
 `1.13` 有[一千四百多个 issue/pull request](https://github.com/docker/docker/milestone/56)，五千多个 commits，是 Docker 历史上最高的发布版本。这并不是一个简单的小版本变化，里面有大量的更新。
 
@@ -22,9 +22,6 @@ tags: [docker, blog]
 ```bash
 curl -fsSL https://get.docker.com/ | sh -s -- --mirror AzureChinaCloud
 ```
-
-*要想在发布前测试 `1.13.0` 的新功能，可以起一个新的机器，然后在里面运行：`curl -fsSL https://test.docker.com/ | sh -s -- --mirror AzureChinaCloud`，这样会安装最新的测试版本。*
-
 
 ## Top 10 新增功能
 
@@ -39,7 +36,7 @@ curl -fsSL https://get.docker.com/ | sh -s -- --mirror AzureChinaCloud
 * 9、允许 `docker run` 连入指定的 swarm mode 的 `overlay` 网络
 * 10、解决中国 `GFW` 墙掉 `docker-engine` `apt`/`yum` 源的问题
 
-让我们来详细解读一下 [`1.13.0` 新增功能](https://github.com/docker/docker/blob/1.13.x/CHANGELOG.md#1130-2017-01-18) 吧。
+让我们来详细解读一下 [`1.13.0` 新增功能](https://github.com/docker/docker/releases/tag/v1.13.0) 吧。
 
 # Docker 镜像构建
 
@@ -296,8 +293,6 @@ curl -sSL https://get.docker.com/ | sh -s -- --mirror AzureChinaCloud
 ```
 
 如果是阿里云的话，将 `AzureChinaCloud` 替换为 `Aliyun`。
-
-*此时，<https://get.docker.com/> 尚未更新，所以暂时可以用 <https://test.docker.com/> 来测试，在 1.13 正式发布后，即可使用。*
 
 ## 增加更多的系统支持
 
