@@ -292,8 +292,6 @@ curl -sSL https://get.docker.com/ | sh
 curl -sSL https://get.docker.com/ | sh -s -- --mirror AzureChinaCloud
 ```
 
-如果是阿里云的话，将 `AzureChinaCloud` 替换为 `Aliyun`。
-
 ## 增加更多的系统支持
 
 在这次发布中，增加了 [`Ubuntu 16.10` 的安装包](https://github.com/docker/docker/pull/27993)，而且对 `Ubuntu` 系统增加了 [`PPC64LE`](https://github.com/docker/docker/pull/23438) 和 [`s390x`](https://github.com/docker/docker/pull/26104) 构架的安装包。此外，还正式支持了 [`VMWare Photon OS` 系统](https://github.com/docker/docker/pull/24116)的 `RPM` 安装包，以及在 `https://get.docker.com` 的支持。并且支持了 [`Fedora 25`](https://github.com/docker/docker/pull/28222)，甚至开始支持 [`arm64`](https://github.com/docker/docker/pull/27625)。同时也由于一些系统生命周期的结束，而被移除支持，比如 `Ubuntu 15.10`、`Fedora 22` 都不在支持了。
@@ -392,8 +390,8 @@ ntjybj51u6zp44akeawuf3i05    d2        Ready   Active
 tp7icvjzvxla2n18j3nztgjz6    d3        Ready   Active
 vyf3mgcj3uonrnh5xxquasp38 *  d1        Ready   Active        Leader
 ubuntu@d1:~$ docker service ps web
-NAME                IMAGE         NODE  DESIRED STATE  CURRENT STATE               ERROR  PORTS
-web.1.ey0mw8o8h2tx  nginx:latest  d3    Running        Running about a minute ago
+ID            NAME    IMAGE         NODE  DESIRED STATE  CURRENT STATE          ERROR  PORTS
+5tij5sjvfpsf  web.1   nginx:latest  d3    Running        Running 5 minutes ago         *:80->80/tcp
 ```
 
 我们可以看到，集群有3个节点，而服务就一个副本，跑到了 `d3` 上。如果这是以前的使用边界负载均衡的网络 `ingress` 的话，那么我们访问任意节点的 `80` 端口都会看到页面。
@@ -649,8 +647,9 @@ https://github.com/docker/docker/pull/24987
 
 ```bash
 $ docker stats
-CONTAINER           CPU %               MEM USAGE / LIMIT    MEM %               NET I/O             BLOCK I/O           PIDS
-7f29e36c3df4        0.00%               88 KiB / 488.4 MiB   0.02%               648 B / 648 B       0 B / 0 B           2
+CONTAINER           CPU %               MEM USAGE / LIMIT       MEM %               NET I/O             BLOCK I/O           PIDS
+e8cb2945b156        0.00%               1.434 MiB / 488.4 MiB   0.29%               1.3 kB / 648 B      12.3 kB / 0 B       2
+61aada055db8        0.00%               3.598 MiB / 488.4 MiB   0.74%               1.3 kB / 1.3 kB     2.29 MB / 0 B       2
 ```
 
 这让人根本没办法知道到底谁是谁。于是有各种[变通的办法](https://github.com/docker/docker/issues/20973)，比如：
@@ -664,9 +663,10 @@ $ docker stats $(docker ps --format={{.Names}})
 从 `1.13` 开始，虽然依旧默认没有容器名，但是增加了 `--format` 参数可以自己设计输出格式：
 
 ```bash
-$ docker stats --format 'table {{.Name}}\t{{.MemUsage}}\t{{.NetIO}}\t{{.BlockIO}}\t{{.PIDs}}'
-NAME                MEM USAGE / LIMIT    NET I/O             BLOCK I/O           PIDS
-myapp1              80 KiB / 488.4 MiB   648 B / 648 B       0 B / 0 B           2
+$ docker stats --format 'table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.MemPerc}}\t{{.NetIO}}\t{{.BlockIO}}\t{{.PIDs}}'
+NAME                               CPU %               MEM USAGE / LIMIT       MEM %               NET I/O             BLOCK I/O           PIDS
+app2.1.5tij5sjvfpsft2lctxh8m8trn   0.00%               1.434 MiB / 488.4 MiB   0.29%               1.3 kB / 648 B      12.3 kB / 0 B       2
+app1.1.mjmb8b0f0w5sy2v41jth3v9s4   0.00%               3.598 MiB / 488.4 MiB   0.74%               1.3 kB / 1.3 kB     2.29 MB / 0 B       2
 ```
 
 ## 给 `docker ps` 增加 `is-task` 过滤器
