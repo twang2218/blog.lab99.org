@@ -770,13 +770,20 @@ $ docker inspect 6rdwhkb84j6i
 
 ## 不在分别构建试验可执行文件，直接使用 `--experimental` 参数
 
+https://github.com/docker/docker/pull/27223
+
 以前我们如果希望测试当前试验功能，必须添加试验分支源，重装 `docker`。这给测试试验分支带来了困难。现在变得简单了，不在分为两组可执行文件构建，合并为一个。如果需要测试试验功能，直接在 `dockerd` 后添加 `--experimental` 即可。
 
 ## 在 `overlay2` 存储驱动使用于 `xfs` 时可以添加磁盘配额
 
+https://github.com/docker/docker/pull/24771
+
 在 1.13 之前，只有块设备文件系统驱动（如 `devicemapper`, `xfs`, `zfs`等）支持磁盘配额能力，而所有 `Union FS` 的驱动，都不支持配额。现在针对使用 `XFS` 为后端的 `overlay2` 驱动支持了磁盘配额，理论上同样的方式可以在将来移植到 `AUFS`。
 
 ## 增加 `docker system` 命令
+
+https://github.com/docker/docker/pull/26108
+https://github.com/docker/docker/pull/27525
 
 很多人在以前搞不懂自己的镜像到底占了多少空间、容器占了多少空间，卷占了多少空间。怎么删除不用的东西以释放资源。从 1.13 开始，Docker 提供了一组 `system` 命令来帮助系统管理上的问题。
 
@@ -823,9 +830,13 @@ Local Volumes       1                   1                   219.4 MB            
 
 ## 提升 `overlay2` 的优先级
 
+https://github.com/docker/docker/pull/27932
+
 由于 `overlay2` 在 4.+ 内核的系统上趋于稳定，因此将其优先级提到 `devicemapper` 之上（优先级最高的依旧是 `aufs`）
 
 ## `docker exec -t` 自动添加 TERM 环境变量
+
+https://github.com/docker/docker/pull/26461
 
 对于在容器中使用 `vi`、`htop` 之类工具的人来说是比较方便的。之前由于默认没有定义 `TERM`，这些需要终端页面布局的程序执行可能会不正常。比如：
 
