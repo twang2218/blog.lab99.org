@@ -1208,9 +1208,9 @@ hexo-tag-owl@^1.2.2:
     object-assign "^4.1.0"
     stylus "^0.54.2"
 
-hexo-toc@^1.0.9:
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/hexo-toc/-/hexo-toc-1.0.9.tgz#160799de7c75ab5bbbb0b1623cf16850d4f362a7"
+hexo-toc@1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/hexo-toc/-/hexo-toc-1.0.4.tgz#4c4bbd25ab0c1babd5e0087eeb641343d172fcc5"
   dependencies:
     cheerio "^0.19.0"
     markdown-toc "^0.12.12"

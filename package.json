@@ -26,6 +26,6 @@
     "hexo-renderer-stylus": "^0.3.3",
     "hexo-server": "^0.2.2",
     "hexo-tag-owl": "^1.2.2",
-    "hexo-toc": "^1.0.9"
+    "hexo-toc": "1.0.4"
   }
 }
