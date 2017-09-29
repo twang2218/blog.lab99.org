@@ -10,7 +10,7 @@ tags: [golang, gophercon2016, youtube, notes]
 
 # 视频信息
 
-Go for Data Science
+**Go for Data Science**
 by Daniel Whitenack
 at GopherCon 2016
 

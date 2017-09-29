@@ -10,7 +10,7 @@ tags: [golang, gophercon2016, youtube, notes]
 
 # 视频信息
 
-Practical Advice for Go Library Authors
+**Practical Advice for Go Library Authors**
 by Jack Lindamood
 at GopherCon 2016
 

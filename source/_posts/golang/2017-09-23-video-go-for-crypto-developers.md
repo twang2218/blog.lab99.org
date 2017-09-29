@@ -1,7 +1,7 @@
 ---
 layout: post
 category: golang
-title: 视频笔记：Go 密码学应用 - Daniel Whitenack
+title: 视频笔记：Go 密码学应用 - George Tankersley
 date: 2017-09-23
 tags: [golang, gophercon2016, youtube, notes]
 ---
@@ -10,7 +10,7 @@ tags: [golang, gophercon2016, youtube, notes]
 
 # 视频信息
 
-Go for Crypto Developers
+**Go for Crypto Developers**
 by George Tankersley
 at GopherCon 2016
 
