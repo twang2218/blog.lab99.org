@@ -2,7 +2,7 @@
 layout: post
 category: golang
 title: 视频笔记：Go 数据科学 - Daniel Whitenack
-date: 2017-09-21
+date: 2017-09-22
 tags: [golang, gophercon2016, youtube, notes]
 ---
 
