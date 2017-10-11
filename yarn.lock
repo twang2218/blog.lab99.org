@@ -1200,6 +1200,12 @@ hexo-server@^0.2.2:
     opn "^4.0.0"
     serve-static "^1.10.0"
 
+hexo-tag-mermaid@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/hexo-tag-mermaid/-/hexo-tag-mermaid-1.0.0.tgz#e22294cb5130b93f15db952fa836d0e75f5fa92b"
+  dependencies:
+    underscore "^1.8.3"
+
 hexo-tag-owl@^1.2.2:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/hexo-tag-owl/-/hexo-tag-owl-1.2.2.tgz#399b4223449bfd3af276e5e65571d5a3d78500b9"
@@ -2800,6 +2806,10 @@ uid-number@^0.0.6:
 underscore.string@~2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/underscore.string/-/underscore.string-2.4.0.tgz#8cdd8fbac4e2d2ea1e7e2e8097c42f442280f85b"
+
+underscore@^1.8.3:
+  version "1.8.3"
+  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.8.3.tgz#4f3fb53b106e6097fcf9cb4109f2a5e9bdfa5022"
 
 underscore@~1.7.0:
   version "1.7.0"

@@ -138,12 +138,12 @@ Go 的社区里，缺乏一种共同的可以交流的语言，用于共享代�
 
 <https://speakerdeck.com/sdboyer/the-new-era-of-go-package-management?slide=27>
 
-```mermaid
+{% mermaid %}
 graph LR
   Project("项目代码 (imports)") --> Gopkg.lock
   Gopkg.toml --> Gopkg.lock
   Gopkg.lock --> Deps("依赖 (vendor)")
-```
+{% endmermaid %}
 
 基本逻辑就是：
 
