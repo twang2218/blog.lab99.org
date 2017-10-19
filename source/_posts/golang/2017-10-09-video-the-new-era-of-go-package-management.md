@@ -47,7 +47,7 @@ Go 的社区里，缺乏一种共同的可以交流的语言，用于共享代�
 
 # 包管理的历史
 
-根本存在的问题：
+`GOPATH` 存在的问题：
 
 * `GOPATH` 只允许一个版本
 * 没有办法可以重现。因为每个人 `go get` 得到的都是不同的版本，都是当前最新的那个版本。
@@ -86,17 +86,17 @@ Go 的社区里，缺乏一种共同的可以交流的语言，用于共享代�
 * `Go 1.6`: `vendor/` 目录默认启用，但可以关闭（2016年2月）
 * `Go 1.7`: `vendor/` 目录永远启用（2016年8月）
 
-当然，这也连带的有嵌套依赖的问题。
+当然，这也连带的有嵌套依赖、多重版本的问题。
 
 # go dep
 
 ![Moving Gopher](https://github.com/ashleymcnamara/gophers/raw/master/MovingGopher.png)
 
-2016年将 `vendor/` 默认开启后，有了对依赖管理更深入的讨论。大家都是 Go 官方应该做一个依赖管理，但是随之而来的就是面临着“又一个标准”的情形。
+2016年将 `vendor/` 默认开启后，有了对依赖管理更深入的讨论。大家都认为 Go 官方应该做一个依赖管理工具，但是同时希望避免出现“又一个标准”的情形。
 
 ![Another Standard](https://d33wubrfki0l68.cloudfront.net/c67e6c813d332cd436018855e78c5f8d458efd53/02a7a/blog-images/boyer-15.png)
 
-为了避免这种问题，Go 团队的 Peter Bourgon 在 2016 年 5 月的时候，建立了一个委员会，有很多大牛参加，来广泛讨论各方面的问题：
+为了避免这种问题，Go 团队的 [Peter Bourgon](https://peter.bourgon.org/) 在 2016 年 5 月的时候，建立了一个委员会，有很多大牛参加，来广泛讨论各方面的问题：
 
 * 争取涵盖现有工具的主要使用场景
 * 设计假象工作流，以确保设计具有可扩展性
@@ -112,7 +112,6 @@ Go 的社区里，缺乏一种共同的可以交流的语言，用于共享代�
 * 双文件系统：`Gopkg.toml` 和 `Gopkg.log`
 * 面向项目的
 * 使用 [SemVer](http://semver.org/lang/zh-CN/) 标签
-  * Dave Cheney 写了一篇博客希望大家都使用 SemVer：<https://dave.cheney.net/2016/06/24/gophers-please-tag-your-releases>
 * `vendor/` 为中心，_基本上_不需要 `GOPATH`
 
 ## 三个主要命令
@@ -140,9 +139,13 @@ Go 的社区里，缺乏一种共同的可以交流的语言，用于共享代�
 
 {% mermaid %}
 graph LR
-  Project("项目代码 (imports)") --> Gopkg.lock
-  Gopkg.toml --> Gopkg.lock
-  Gopkg.lock --> Deps("依赖 (vendor)")
+  subgraph ""
+    Project("项目代码 (imports)") ==> Gopkg.lock
+    Gopkg.toml ==> Gopkg.lock
+    Gopkg.lock ==> Deps("依赖 (vendor)")
+  end
+  classDef box fill:#e3f2fd,stroke:#333,stroke-width:2px;
+  class Project,Gopkg.lock,Gopkg.toml,Deps box;
 {% endmermaid %}
 
 基本逻辑就是：
@@ -171,7 +174,7 @@ graph LR
 所以 `dep` 是未来的一块基石，希望将来在集成到 `go` 工具链后，`dep` 就可以渐渐退出舞台了。
 
 仅仅是 Go Team 做这件事情已经比较难了，而现在更大的问题是将第一次大规模的接纳社区大量的代码进入 Go 核心。
-  
+
 将来的工具链依旧会继承今天 `dep` 里面的特性：
 
 * 双文件系统
@@ -201,6 +204,8 @@ graph LR
 
 * 请务必用 SemVer tag 你的项目
   * 将来可能会根据 API 变化情况来建议下一个 SemVer 的版本是什么。
+  * Dave Cheney 写了一篇博客希望大家都使用 SemVer：<https://dave.cheney.net/2016/06/24/gophers-please-tag-your-releases>
+
 * 转换项目依赖工具到 `dep`（是的，现在已经可以用了！）
   * `Gopkg.toml` 和 `Gopkg.lock` 格式已经稳定，2个月前就固定下来了
   * 但是命令以及参数可能还会改变，所以建议暂时不要写脚本来依赖命令格式

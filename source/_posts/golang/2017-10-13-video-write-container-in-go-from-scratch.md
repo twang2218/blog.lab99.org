@@ -130,7 +130,7 @@ PID   USER     TIME   COMMAND
 
 ## 启动一个 Linux 系统
 
-这里我们用 Vagrant 启动一个 Linux 系统，因为接下来我们将使用一些 Linux 内核相关的技术，这些将只存在于 Linux 中。不熟悉 Vagrant 可以先去学习如何使用 Vagrant。熟悉的继续，我们建立一个 `Vagrantfile`，内容为：
+这里我们用 [Vagrant](https://www.vagrantup.com/intro/index.html) 启动一个 Linux 系统，因为接下来我们将使用一些 Linux 内核相关的技术，这些将只存在于 Linux 中。不熟悉 Vagrant 可以先去学习[如何使用 Vagrant](https://www.vagrantup.com/intro/getting-started/index.html)。熟悉的继续，我们建立一个 `Vagrantfile`，内容为：
 
 ```ruby
 # -*- mode: ruby -*-
@@ -151,7 +151,7 @@ Vagrant.configure("2") do |config|
 end
 ```
 
-这是配置了一个 Ubuntu Server 16.04 LTS 版本的虚拟机，并且安装了 Docker 和 Go，而且准备了一个 alpine 的 `rootfs` 以备后用。
+这是配置了一个 [Ubuntu Server 16.04 LTS](https://wiki.ubuntu.com/XenialXerus/ReleaseNotes?_ga=2.155044219.232627992.1508377352-890558848.1503503283#Ubuntu_Server) 版本的虚拟机，并且安装了 [Docker](https://www.docker-cn.com/) 和 [Go](https://golang.org/)，而且准备了一个 [Alpine Linux](https://alpinelinux.org/) 的 `rootfs` 以备后用。
 
 然后我们用  `vagrant up` 来启动这个虚拟机，并且用 `vagrant ssh` 进入这个虚拟机。
 
@@ -245,15 +245,15 @@ sh-3.2$ ps
 
 ```go
 func run() {
-  ...
-  cmd.Stderr = os.Stderr
+	...
+	cmd.Stderr = os.Stderr
 
 	cmd.SysProcAttr = &syscall.SysProcAttr{
 		Cloneflags: syscall.CLONE_NEWUTS,
 	}
 
-  must(cmd.Run())
-  ...
+	must(cmd.Run())
+	...
 }
 ```
 
@@ -274,11 +274,11 @@ vagrant@vagrant:/vagrant$ hostname
 vagrant
 ```
 
-看到了吧，这次我们的进程在新的 hostname 命名空间中执行了，这个进程已经可以说是在一个（部分）新的容器中运行了。我们在容器中修改了 hostname，回到宿主后，可以看到 hostname 并未发生改变，两个命名空间是独立的。
+看到了吧，这次我们的进程在新的 `hostname` 命名空间中执行了，这个进程已经可以说是在一个（部分）新的容器中运行了。我们在容器中修改了 `hostname`，回到宿主后，可以看到 `hostname` 并未发生改变，两个命名空间是独立的。
 
 ## 隔离 PID 命名空间
 
-上面的程序只是隔离了 hostname，没有隔离进程空间，所以在容器中还是可以看到宿主的进程：
+上面的程序只是隔离了 `hostname`，没有隔离进程空间，所以在容器中还是可以看到宿主的进程：
 
 ```bash
 vagrant@vagrant:/vagrant$ sudo go run docker.go run /bin/sh
@@ -297,11 +297,11 @@ Running [/bin/sh]
 
 ```go
 func run() {
-  ...
-  	cmd.SysProcAttr = &syscall.SysProcAttr{
+	...
+	cmd.SysProcAttr = &syscall.SysProcAttr{
 		Cloneflags: syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID,
 	}
-  ...
+	...
 }
 ```
 
@@ -503,11 +503,11 @@ func must(err error) {
 
 ```go
 func child() {
-  ...
+	...
 	must(syscall.Chroot("/var/lib/alpine"))
 	must(os.Chdir("/"))
-  must(syscall.Mount("proc", "proc", "proc", 0, ""))
-  ...
+	must(syscall.Mount("proc", "proc", "proc", 0, ""))
+	...
 }
 ```
 
