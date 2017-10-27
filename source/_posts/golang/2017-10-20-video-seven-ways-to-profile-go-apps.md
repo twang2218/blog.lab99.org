@@ -387,7 +387,7 @@ Showing top 10 nodes out of 12
 
 这显然很不直观，性能分析更好的是使用可视化分析。可以在交互模式下执行 `web` 命令，这样会生成一个 `svg` 文件，然后用浏览器或者其它工具打开。
 
-![profile svg](../image/blogs/golang-profile-pprof.svg)
+![profile svg](../pics/golang/profile/pprof.svg)
 
 这个图是 CPU 性能分析的图，这里可以直观的看出哪个地方最消耗 CPU，使用时间越多的，方块面积就越大。而且由于其继承关系清晰可见，我们可以很清楚的看到为什么它会消耗很多 CPU。
 
@@ -410,11 +410,11 @@ $ go tool pprof --inuse_objects -svg $(go tool -n compile) /tmp/m.p > inuse_obje
 
 * alloc_objects
 
-![alloc_objects](../image/blogs/golang-profile-alloc_objects.svg)
+![alloc_objects](../pics/golang/profile/alloc_objects.svg)
 
 * inuse_objects
 
-![inuse_objects](../image/blogs/golang-profile-inuse_objects.svg)
+![inuse_objects](../pics/golang/profile/inuse_objects.svg)
 
 ### 阻塞性能分析
 
@@ -425,7 +425,7 @@ $ go test -run=XXX -bench=ClientServer -blockprofile=/tmp/b.p net/http
 $ go tool pprof -svg http.test /tmp/b.p > block.svg
 ```
 
-![inuse_objects](../image/blogs/golang-profile-block.svg)
+![inuse_objects](../pics/golang/profile/block.svg)
 
 # 插曲二：Frame Pointer
 
@@ -519,7 +519,7 @@ $ go tool trace /tmp/t.p
 
 点进去就可以看到各种分析。
 
-![trace](../image/blogs/golang-profile-trace.jpg)
+![trace](../pics/golang/profile/trace.jpg)
 
 另外，Dave Cheney 做的 `pkg/profile` 也支持生成 trace profile 了。
 
