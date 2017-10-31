@@ -82,6 +82,8 @@ Jack Lindamood [Github: @cep21](https://github.com/cep21), [Medium: @cep21](http
 
 ## 示例 `Context` 链
 
+完整代码：<https://play.golang.org/p/ddpofBV1QS>
+
 ```go
 package main
 
@@ -90,7 +92,7 @@ func tree() {
   ctx2, _ := context.WithCancel(ctx1)
   ctx3, _ := context.WithTimeout(ctx2, time.Second * 5)
   ctx4, _ := context.WithTimeout(ctx3, time.Second * 3)
-  ctx5, _ := context.WithTimeout(ctx5, time.Second * 6)
+  ctx5, _ := context.WithTimeout(ctx3, time.Second * 6)
   ctx6 := context.WithValue(ctx5, "userID", 12)
 }
 ```
