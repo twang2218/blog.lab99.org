@@ -249,7 +249,7 @@ func DoTwoRequestsAtOnce(ctx context.Context) error {
       defer cancel()
       req, _ := http.NewRequest("GET", loc, nil)
       var err error
-      *resp, err = http.DefaultClient.Do(req.WithContext(reqCtx))
+      *respIn, err = http.DefaultClient.Do(req.WithContext(reqCtx))
       if err == nil && (*respIn).StatusCode >= 500 {
         return errors.New("unexpected!")
       }
